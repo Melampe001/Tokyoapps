@@ -1097,3 +1097,34 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/  # Crea esta carpeta y agrega imágenes si quieres (opcional)[![CI](https://github.com/Melampe001/Idea/actions/workflows/blank.yml/badge.svg)](https://github.com/Melampe001/Idea/actions/workflows/blank.yml)
+@echo off
+title 🔧 LIMPIEZA Y REPARACIÓN TOTAL by Melampe
+echo ==============================================
+echo 🧹 LIMPIANDO ARCHIVOS TEMPORALES Y CACHES...
+echo ==============================================
+
+REM --- Node.js / JavaScript / TypeScript ---
+if exist node_modules rmdir /s /q node_modules
+if exist package-lock.json del /f /q package-lock.json
+if exist dist rmdir /s /q dist
+if exist build rmdir /s /q build
+if exist .next rmdir /s /q .next
+if exist .turbo rmdir /s /q .turbo
+npm cache clean --force
+
+REM --- Python ---
+if exist __pycache__ rmdir /s /q __pycache__
+del /s /q *.pyc
+
+REM --- Visual Studio (.NET / C# / C++) ---
+dotnet clean
+dotnet restore
+dotnet build
+
+REM --- Java ---
+if exist gradlew (
+    call gradlew clean
+    call gradlew build
+)
+
+REM --- Reinst
