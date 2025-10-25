@@ -723,7 +723,64 @@ nvm_install_node() {
 
   nvm_echo "=> Instalando la versión $NODE_VERSION_LOCAL de Node.js"
   nvm instalar "$NODE_VERSION_LOCAL"
-  NODO_NVM_ACTUAL_local
+  NODO_NVM_ACTUAL_local@echo off
+title Limpieza y reparación universal - Melampe Power Fixer ⚡
+echo ===============================================
+echo 🔧 Iniciando limpieza universal...
+echo ===============================================
+
+:: Node.js / JavaScript / TypeScript
+if exist node_modules (
+    echo 🧹 Borrando dependencias de Node.js...
+    rmdir /s /q node_modules
+)
+if exist package-lock.json del /f /q package-lock.json
+if exist dist rmdir /s /q dist
+if exist build rmdir /s /q build
+if exist .next rmdir /s /q .next
+if exist .turbo rmdir /s /q .turbo
+
+echo 🚀 Limpiando cache npm...
+npm cache clean --force >nul 2>&1
+
+echo 🔧 Reinstalando dependencias...
+npm install
+
+echo ⚙️ Compilando proyecto...
+npm run build
+
+:: Visual Studio / .NET
+echo 🧰 Reparando proyectos .NET / Visual Studio...
+dotnet clean
+dotnet restore
+dotnet build
+
+:: Python
+if exist requirements.txt (
+    echo 🐍 Reparando entorno Python...
+    rmdir /s /q _pycache_ >nul 2>&1
+    del /f /q *.pyc >nul 2>&1
+    pip install --upgrade pip
+    pip install -r requirements.txt
+)
+
+:: Java
+if exist build.gradle (
+    echo ☕ Reparando proyecto Java...
+    gradlew clean
+    gradlew build
+)
+
+:: C++
+if exist CMakeLists.txt (
+    echo 🧩 Compilando proyecto C++...
+    if exist build rmdir /s /q build
+    mkdir build
+    cd build
+    cmake ..
+    make
+    cd ..
+)
 
   NODO_NVM_ACTUAL="$(versión_nvm_actual)"
   si [ "$(nvm_version "$NODE_VERSION_LOCAL")" == "$CURRENT_NVM_NODE" ]; entonces
@@ -1127,4 +1184,76 @@ if exist gradlew (
     call gradlew build
 )
 
-REM --- Reinst
+REM --- Reinstname: 💥 Melampe Power Auto Fix + Build + Deploy ⚡
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest@echo off
+title Limpieza y reparación universal - Melampe Power Fixer ⚡
+echo ===============================================
+echo 🔧 Iniciando limpieza universal...
+echo ===============================================
+
+:: Node.js / JavaScript / TypeScript
+if exist node_modules (
+    echo 🧹 Borrando dependencias de Node.js...
+    rmdir /s /q node_modules
+)
+if exist package-lock.json del /f /q package-lock.json
+if exist dist rmdir /s /q dist
+if exist build rmdir /s /q build
+if exist .next rmdir /s /q .next
+if exist .turbo rmdir /s /q .turbo
+
+echo 🚀 Limpiando cache npm...
+npm cache clean --force >nul 2>&1
+
+echo 🔧 Reinstalando dependencias...
+npm install
+
+echo ⚙️ Compilando proyecto...
+npm run build
+
+:: Visual Studio / .NET
+echo 🧰 Reparando proyectos .NET / Visual Studio...
+dotnet clean
+dotnet restore
+dotnet build
+
+:: Python
+if exist requirements.txt (
+    echo 🐍 Reparando entorno Python...
+    rmdir /s /q _pycache_ >nul 2>&1
+    del /f /q *.pyc >nul 2>&1
+    pip install --upgrade pip
+    pip install -r requirements.txt
+)
+
+:: Java
+if exist build.gradle (
+    echo ☕ Reparando proyecto Java...
+    gradlew clean
+    gradlew build
+)
+
+:: C++
+if exist CMakeLists.txt (
+    echo 🧩 Compilando proyecto C++...
+    if exist build rmdir /s /q build
+    mkdir build
+    cd build
+    cmake ..
+    make
+    cd ..
+)
+
