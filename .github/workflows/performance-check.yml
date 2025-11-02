@@ -13,6 +13,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Minimal permissions for security
+permissions:
+  contents: read
+
 jobs:
   performance-validation:
     runs-on: ubuntu-latest
