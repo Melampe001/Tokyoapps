@@ -22,14 +22,12 @@ Tokyo Roulette Predictor is a sophisticated mobile application that provides int
 
 ## 🚀 Quick Start
 
-### Prerequisites
+**New to the project?** Start here:
+1. 📖 [**QUICK_START.md**](QUICK_START.md) - Get running in 10 minutes
+2. 🔧 [**SETUP_GUIDE.md**](SETUP_GUIDE.md) - Complete setup instructions
+3. ⚠️ [**TROUBLESHOOTING.md**](TROUBLESHOOTING.md) - Solve common issues
 
-- Flutter SDK 3.0.0+
-- Android Studio or VS Code
-- Java JDK 11+
-- Android SDK (API 24-35)
-
-### Installation
+### Quick Installation
 
 ```bash
 # Clone repository
@@ -39,19 +37,31 @@ cd Tokyoapps
 # Install dependencies
 flutter pub get
 
-# Configure Firebase (requires Firebase project)
-flutterfire configure
-
-# Run the app
+# Run in demo mode (no Firebase needed)
 flutter run
+
+# OR configure Firebase for full features
+./scripts/setup_firebase.sh
 ```
 
 ## 📚 Documentation
 
-- **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Technical architecture and features
-- **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive testing procedures
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Build and deployment guide
-- **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Complete implementation status
+### Getting Started
+- 🚀 [**QUICK_START.md**](QUICK_START.md) - 10-minute quick start guide
+- 🔧 [**SETUP_GUIDE.md**](SETUP_GUIDE.md) - Complete Firebase/Stripe/Play Console setup
+- 💻 [**CONTRIBUTING.md**](CONTRIBUTING.md) - Development guidelines
+
+### Reference
+- 🏗️ [**IMPLEMENTATION.md**](IMPLEMENTATION.md) - Technical architecture details
+- 📊 [**PROJECT_SUMMARY.md**](PROJECT_SUMMARY.md) - Complete feature status
+- 🧪 [**TESTING_GUIDE.md**](TESTING_GUIDE.md) - Comprehensive testing procedures
+- 🚀 [**DEPLOYMENT.md**](DEPLOYMENT.md) - Build and deployment guide
+
+### Tools & Support
+- ⚠️ [**TROUBLESHOOTING.md**](TROUBLESHOOTING.md) - Common issues and solutions
+- ✅ [**RELEASE_CHECKLIST.md**](RELEASE_CHECKLIST.md) - Pre-release checklist
+- 📝 [**.env.example**](.env.example) - Environment configuration template
+- 🔨 [**scripts/**](scripts/) - Build and setup automation scripts
 
 ## 🏗️ Architecture
 
@@ -146,17 +156,49 @@ This project is proprietary software. All rights reserved.
 **Tokyo / Melampe**
 - GitHub: [@Melampe001](https://github.com/Melampe001)
 
-## 🤝 Support
+## 🤝 Support & Help
 
-For issues or questions:
-- Create an issue on GitHub
-- Email: support@example.com
+### Quick Links
+- 📖 Start with [QUICK_START.md](QUICK_START.md) for setup
+- ⚠️ Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues
+- 🔧 See [SETUP_GUIDE.md](SETUP_GUIDE.md) for detailed configuration
 
-## 📈 Status
+### Getting Help
+1. **Search first:** Check existing [GitHub Issues](https://github.com/Melampe001/Tokyoapps/issues)
+2. **Documentation:** Review relevant docs above
+3. **Create issue:** File a [new issue](https://github.com/Melampe001/Tokyoapps/issues/new) with:
+   - Clear description
+   - Steps to reproduce
+   - Error messages
+   - System info (`flutter doctor -v`)
+
+### Community
+- 💬 GitHub Discussions
+- 📧 Email: support@example.com (for sensitive issues)
+
+## 📈 Project Status
+
+| Component | Status |
+|-----------|--------|
+| **Core App** | ✅ Complete |
+| **MVVM Architecture** | ✅ Complete |
+| **Firebase Integration** | ✅ Complete (needs config) |
+| **Stripe Integration** | ✅ Complete (needs config) |
+| **Camera OCR** | ✅ Complete |
+| **Automated Tests** | ✅ Complete |
+| **Documentation** | ✅ Complete |
+| **CI/CD Pipeline** | ✅ Complete |
+| **Play Store Ready** | ⚠️ Needs configuration |
 
 **Current Version**: 1.0.0  
-**Status**: ✅ Production Ready (pending Firebase/Stripe configuration)  
+**Status**: ✅ **Production Ready** - Complete with comprehensive setup documentation  
 **Last Updated**: November 2025
+
+### What's Needed to Deploy
+1. Configure Firebase (5 minutes) - See [SETUP_GUIDE.md](SETUP_GUIDE.md#firebase-configuration)
+2. Set up Stripe (10 minutes) - See [SETUP_GUIDE.md](SETUP_GUIDE.md#stripe-setup)
+3. Create Play Console account - See [SETUP_GUIDE.md](SETUP_GUIDE.md#google-play-console-setup)
+4. Build and upload - Use [scripts/build_appbundle.sh](scripts/build_appbundle.sh)
 
 ---
 
