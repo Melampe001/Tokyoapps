@@ -22,32 +22,39 @@ Tokyo Roulette Predictor is a sophisticated mobile application that provides int
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Flutter SDK 3.0.0+
-- Android Studio or VS Code
-- Java JDK 11+
-- Android SDK (API 24-35)
-
-### Installation
+### 5-Minute Setup
 
 ```bash
 # Clone repository
 git clone https://github.com/Melampe001/Tokyoapps.git
 cd Tokyoapps
 
-# Install dependencies
-flutter pub get
-
-# Configure Firebase (requires Firebase project)
-flutterfire configure
+# Run automated setup
+./setup.sh
 
 # Run the app
 flutter run
 ```
 
+**New to the project?** Start with [QUICK_START.md](QUICK_START.md) for a beginner-friendly guide!
+
+### Prerequisites
+
+- Flutter SDK 3.0.0+
+- Android Studio or VS Code with Flutter extensions
+- Java JDK 11+
+- Android SDK (API 24-35)
+- Android device or emulator
+
+**Need help with setup?** See [REQUIREMENTS.md](REQUIREMENTS.md) for detailed installation instructions.
+
 ## 📚 Documentation
 
+### Getting Started
+- **[QUICK_START.md](QUICK_START.md)** - 5-minute setup guide for beginners
+- **[REQUIREMENTS.md](REQUIREMENTS.md)** - Complete list of dependencies and setup
+
+### Development & Deployment
 - **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Technical architecture and features
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive testing procedures
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Build and deployment guide
