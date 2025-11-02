@@ -14,11 +14,11 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var tvResultado: TextView
-    private lateinit var tvHistoria: TextView
-    private lateinit var tvPrediccion: TextView
-    private lateinit var tvMartingale: TextView
-    private lateinit var tvPragmatic: Text
+    private lateinit var resultTextView: TextView
+    private lateinit var historyTextView: TextView
+    private lateinit var predictionTextView: TextView
+    private lateinit var martingaleTextView: TextView
+    private lateinit var pragmaticTextView: TextView
 [3:36 a.m., 25/10/2025] Tokyo: Contexto: Tu tarea es desarrollar una aplicación multiplataforma completa y funcional para simular y predecir resultados en ruletas europea y americana, eliminando cualquier restricción específica a dispositivos como Motorola Edge 60 Fusion. La app debe ser compatible con todos los dispositivos Android, iOS (Apple), tabletas, laptops portátiles y computadoras de escritorio, permitiendo al usuario seleccionar la plataforma objetivo durante la instalación o ejecución para una optimización óptima (por ejemplo, mediante opciones de configuración o builds específicos). Incluye un modelo freemium con versión gratuita (predicciones simples como hot/cold y frecuencias básicas) y versiones pagas: avanzada a $399 (predicciones de vecinos, porcentajes detallados) y pre…
 [3:46 a.m., 25/10/2025] Tokyo: Perfecto, entonces zona del cero: doce y treinta y cinco –los que más salen ahí. Huérfanos: uno y diecisiete, que sí, diecisiete se repite pero ya ves, la rueda lo quiere. Tiers: cinco y veintisiete. Y la última, la que va de veintidós hasta veintinueve –digamos, veintidós y veintinueve. Ocho números: doce, treinta y cinco, uno, diecisiete, cinco, veintisiete, veintidós, veintinueve. Te los digo pausado: doce... treinta y cinco... uno... diecisiete... cinco... veintisiete... veintidós... veintinueve. Apostar, esperar tres o cuatro, volver. Si en cinco rondas no pasa nada, cambia uno, el menos frecuente en la mesa que estés viendo. ¡Y que la suerte no sea teatro, sino realidad!
 [3:47 a.m., 25/10/2025] Tokyo: Oye, entra a gamblingcounting o robotpredictor-dos sitios que sí dan stats en vivo de ruletas europeas tipo Evolution. De los últimos quinientos giros que acabo de checar, tu ocho: doce, treinta y cinco, uno, diecisiete, cinco, veintisiete, veintidós, veintinueve... pues, caen un 23% del total, un pelín más que los 2.7% por número que toca teóricamente. En tiempo real, cada giro te da como uno a cuatro de que salga algo tuyo-pero ojo, la casa siempre cobra ese 2.7% de ventaja, así que ni creas que es garantía. ¿Quieres que te marque alertas cuando esos números estén calientes o ya vas a apostar y rezar?
@@ -99,24 +99,24 @@ y lo mete dentro de una app Android lista para instalar.
 
 https://melampe001…
 class MartingaleAdvisor {
-  double baseBet = 1.0;
-  double currentBet = 1.0;
-  bool lastWin = true; // Reset on win
+  double baseBetAmount = 1.0;
+  double currentBetAmount = 1.0;
+  bool wasLastBetWon = true; // Reset on win
 
-  double getNextBet(bool win) {
-    if (win) {
-      currentBet = baseBet;
-      lastWin = true;
+  double calculateNextBet(bool didWinLastBet) {
+    if (didWinLastBet) {
+      currentBetAmount = baseBetAmount;
+      wasLastBetWon = true;
     } else {
-      currentBet *= 2;
-      lastWin = false;
+      currentBetAmount *= 2;
+      wasLastBetWon = false;
     }
-    return currentBet;
+    return currentBetAmount;
   }
 
-  void reset() {
-    currentBet = baseBet;
-    lastWin = true;
+  void resetToBaseBet() {
+    currentBetAmount = baseBetAmount;
+    wasLastBetWon = true;
   }
 }
 github.com/tuusuario/roulette-app
@@ -124,13 +124,13 @@ import 'dart:math';
 import 'package:pointycastle/pointycastle.dart'; // Para RNG seguro
 
 class RouletteRNG {
-  final List<int> europeanWheel = List.generate(37, (i) => i); // 0-36
-  final List<int> americanWheel = [0, ...List.generate(36, (i) => i+1), 00]; // Custom para 00
+  final List<int> europeanWheelNumbers = List.generate(37, (i) => i); // 0-36
+  final List<int> americanWheelNumbers = [0, ...List.generate(36, (i) => i+1), 00]; // Custom para 00
 
-  int generateResult(bool isEuropean) {
-    var wheel = isEuropean ? europeanWheel : americanWheel;
-    var rng = Random.secure(); // Crypto-secure RNG
-    return wheel[rng.nextInt(wheel.length)];
+  int generateSpinResult(bool isEuropeanWheel) {
+    var selectedWheel = isEuropeanWheel ? europeanWheelNumbers : americanWheelNumbers;
+    var randomNumberGenerator = Random.secure(); // Crypto-secure RNG
+    return selectedWheel[randomNumberGenerator.nextInt(selectedWheel.length)];
   }
 }
 <uses-permission android:name="android.permission.INTERNET" />
@@ -146,8 +146,8 @@ class RouletteRNG {
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> requestPermissions() async {
-  var status = await Permission.location.request(); // Para geobloqueo
-  if (status.isDenied) { /* Maneja denegación: muestra dialog explicando por qué (cumplimiento legal) */ }
+  var permissionStatus = await Permission.location.request(); // Para geobloqueo
+  if (permissionStatus.isDenied) { /* Maneja denegación: muestra dialog explicando por qué (cumplimiento legal) */ }
   // Repite para storage, camera, etc.
   // Verifica todos: if (await Permission.storage.isGranted && await Permission.location.isGranted) { /* Procede */ }
 }
@@ -1494,28 +1494,28 @@ import 'dart:math';
 import 'package:pointycastle/pointycastle.dart';
 
 class RouletteRNG {
-  final List<int> europeanWheel = List.generate(37, (i) => i); // 0-36
-  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 00, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2]; // Orden real de rueda americana con 00
+  final List<int> europeanWheelNumbers = List.generate(37, (i) => i); // 0-36
+  final List<int> americanWheelNumbers = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 00, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2]; // Orden real de rueda americana con 00
 
-  int generateResult(bool isEuropean) {
-    var wheel = isEuropean ? europeanWheel : americanWheel;
-    var rng = FortunaRandom();
-    var seed = List<int>.generate(32, (_) => Random.secure().nextInt(256));
-    rng.seed(KeyParameter(Uint8List.fromList(seed)));
-    return wheel[rng.nextUint32() % wheel.length];
+  int generateSpinResult(bool isEuropeanWheel) {
+    var selectedWheel = isEuropeanWheel ? europeanWheelNumbers : americanWheelNumbers;
+    var randomNumberGenerator = FortunaRandom();
+    var randomSeed = List<int>.generate(32, (_) => Random.secure().nextInt(256));
+    randomNumberGenerator.seed(KeyParameter(Uint8List.fromList(randomSeed)));
+    return selectedWheel[randomNumberGenerator.nextUint32() % selectedWheel.length];
   }
 
-  List<int> getNeighbors(int number, bool isEuropean, int count = 4) {
-    // Devuelve 'count' vecinos a cada lado (para proyecciones avanzadas)
-    var wheel = isEuropean ? europeanWheel : americanWheel;
-    int index = wheel.indexOf(number);
-    if (index == -1) return [];
-    List<int> neighbors = [];
-    for (int i = 1; i <= count; i++) {
-      neighbors.add(wheel[(index + i) % wheel.length]);
-      neighbors.add(wheel[(index - i + wheel.length) % wheel.length]);
+  List<int> getAdjacentNumbers(int targetNumber, bool isEuropeanWheel, int neighborCount = 4) {
+    // Devuelve 'neighborCount' vecinos a cada lado (para proyecciones avanzadas)
+    var selectedWheel = isEuropeanWheel ? europeanWheelNumbers : americanWheelNumbers;
+    int numberIndex = selectedWheel.indexOf(targetNumber);
+    if (numberIndex == -1) return [];
+    List<int> adjacentNumbers = [];
+    for (int i = 1; i <= neighborCount; i++) {
+      adjacentNumbers.add(selectedWheel[(numberIndex + i) % selectedWheel.length]);
+      adjacentNumbers.add(selectedWheel[(numberIndex - i + selectedWheel.length) % selectedWheel.length]);
     }
-    return neighbors..sort();
+    return adjacentNumbers..sort();
   }
 }import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -1602,92 +1602,92 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool isEuropean = true;
-  List<int> history = [];
-  RouletteRNG rng = RouletteRNG();
-  MartingaleAdvisor martingale = MartingaleAdvisor();
-  String prediction = '';
-  bool isPremium = false;
+  bool isEuropeanRouletteSelected = true;
+  List<int> spinHistory = [];
+  RouletteRNG rouletteRandomGenerator = RouletteRNG();
+  MartingaleAdvisor bettingAdvisor = MartingaleAdvisor();
+  String predictionText = '';
+  bool hasPremiumSubscription = false;
 
   @override
   void initState() {
     super.initState();
-    _loadPreferences();
+    _loadUserPreferences();
   }
 
-  void _loadPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isPremium = prefs.getBool('isPremium') ?? false;
+  void _loadUserPreferences() async {
+    SharedPreferences userPreferences = await SharedPreferences.getInstance();
+    hasPremiumSubscription = userPreferences.getBool('isPremium') ?? false;
   }
 
-  void _spin() {
-    int result = rng.generateResult(isEuropean);
+  void spinRoulette() {
+    int spinResult = rouletteRandomGenerator.generateSpinResult(isEuropeanRouletteSelected);
     setState(() {
-      history.add(result);
-      prediction = _predictNext();
+      spinHistory.add(spinResult);
+      predictionText = _generatePrediction();
     });
-    if (isPremium) FirebaseFirestore.instance.collection('spins').add({'result': result});
+    if (hasPremiumSubscription) FirebaseFirestore.instance.collection('spins').add({'result': spinResult});
   }
 
-  String _predictNext() {
-    if (history.isEmpty) return 'No hay historial para proyecciones.';
+  String _generatePrediction() {
+    if (spinHistory.isEmpty) return 'No hay historial para proyecciones.';
     
     // Calcula frecuencias para TODOS los números posibles (proyección general)
-    var wheel = isEuropean ? rng.europeanWheel : rng.americanWheel;
-    Map<int, int> freq = {for (var num in wheel) num: 0};
-    for (var num in history) {
-      if (freq.containsKey(num)) freq[num] = (freq[num] ?? 0) + 1;
+    var currentWheelNumbers = isEuropeanRouletteSelected ? rouletteRandomGenerator.europeanWheelNumbers : rouletteRandomGenerator.americanWheelNumbers;
+    Map<int, int> numberFrequencyMap = {for (var number in currentWheelNumbers) number: 0};
+    for (var number in spinHistory) {
+      if (numberFrequencyMap.containsKey(number)) numberFrequencyMap[number] = (numberFrequencyMap[number] ?? 0) + 1;
     }
     
     // Ordena por frecuencia
-    var sortedFreq = freq.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    var sortedFrequencies = numberFrequencyMap.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
     
     // Proyecciones básicas (gratuitas): Top 5 calientes y fríos
-    List<int> hot = sortedFreq.take(5).map((e) => e.key).toList();
-    List<int> cold = sortedFreq.reversed.take(5).map((e) => e.key).toList();
+    List<int> hotNumbers = sortedFrequencies.take(5).map((entry) => entry.key).toList();
+    List<int> coldNumbers = sortedFrequencies.reversed.take(5).map((entry) => entry.key).toList();
     
-    String proj = 'Proyección (calientes: ${hot.join(', ')} | fríos: ${cold.join(', ')})';
+    String predictionMessage = 'Proyección (calientes: ${hotNumbers.join(', ')} | fríos: ${coldNumbers.join(', ')})';
     
     // Proyecciones avanzadas (pagadas): Vecinos del último número
-    if (isPremium && history.isNotEmpty) {
-      var last = history.last;
-      var neighbors = rng.getNeighbors(last, isEuropean);
-      proj += '\nVecinos de $last: ${neighbors.join(', ')} (proyección para próximos giros)';
+    if (hasPremiumSubscription && spinHistory.isNotEmpty) {
+      var lastSpinResult = spinHistory.last;
+      var adjacentNumbers = rouletteRandomGenerator.getAdjacentNumbers(lastSpinResult, isEuropeanRouletteSelected);
+      predictionMessage += '\nVecinos de $lastSpinResult: ${adjacentNumbers.join(', ')} (proyección para próximos giros)';
     }
     
-    return proj;
+    return predictionMessage;
   }
 
-  Widget _buildPieChart() {
+  Widget buildFrequencyPieChart() {
     // Gráfico de frecuencias (para todos los números)
-    var wheel = isEuropean ? rng.europeanWheel : rng.americanWheel;
-    Map<int, int> freq = {for (var num in wheel) num: 0};
-    for (var num in history) freq[num] = (freq[num] ?? 0) + 1;
+    var currentWheelNumbers = isEuropeanRouletteSelected ? rouletteRandomGenerator.europeanWheelNumbers : rouletteRandomGenerator.americanWheelNumbers;
+    Map<int, int> numberFrequencyMap = {for (var number in currentWheelNumbers) number: 0};
+    for (var number in spinHistory) numberFrequencyMap[number] = (numberFrequencyMap[number] ?? 0) + 1;
     
-    List<charts.Series<MapEntry<int, int>, int>> series = [
+    List<charts.Series<MapEntry<int, int>, int>> chartSeriesList = [
       charts.Series<MapEntry<int, int>, int>(
         id: 'Freq',
-        data: freq.entries.toList(),
-        domainFn: (entry, _) => entry.key,
-        measureFn: (entry, _) => entry.value,
+        data: numberFrequencyMap.entries.toList(),
+        domainFn: (frequencyEntry, _) => frequencyEntry.key,
+        measureFn: (frequencyEntry, _) => frequencyEntry.value,
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
       )
     ];
-    return charts.PieChart<int>(series);
+    return charts.PieChart<int>(chartSeriesList);
   }
 
-  void _purchaseAdvanced() async {
+  void purchaseAdvancedSubscription() async {
     // Implementa Stripe o in_app_purchase (ejemplo con Stripe)
-    var paymentIntent = await _createPaymentIntent(19900); // $199
-    await Stripe.instance.initPaymentSheet(paymentSheetParameters: SetupPaymentSheetParameters(paymentIntentClientSecret: paymentIntent['client_secret']));
+    var paymentIntentData = await createStripePaymentIntent(19900); // $199
+    await Stripe.instance.initPaymentSheet(paymentSheetParameters: SetupPaymentSheetParameters(paymentIntentClientSecret: paymentIntentData['client_secret']));
     await Stripe.instance.presentPaymentSheet();
     // On success:
-    setState(() => isPremium = true);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isPremium', true);
+    setState(() => hasPremiumSubscription = true);
+    SharedPreferences userPreferences = await SharedPreferences.getInstance();
+    userPreferences.setBool('isPremium', true);
   }
 
-  Future<Map<String, dynamic>> _createPaymentIntent(int amount) async {
+  Future<Map<String, dynamic>> createStripePaymentIntent(int amountInCents) async {
     // Llama a backend para crear intent (placeholder)
     return {}; 
   }
@@ -1698,13 +1698,13 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(title: Text('Ruleta Simulador')),
       body: Column(
         children: [
-          SwitchListTile(title: Text('Europea/Americana'), value: isEuropean, onChanged: (val) => setState(() => isEuropean = val)),
-          ElevatedButton(onPressed: _spin, child: Text('Girar')),
-          Text('Resultado: ${history.lastOrNull ?? ''}'),
-          Text('Proyección: $prediction'),
-          Text('Martingale: Apuesta siguiente ${martingale.getNextBet(false)}'), // General, no fijo
-          SizedBox(height: 200, child: _buildPieChart()),
-          if (!isPremium) ElevatedButton(onPressed: _purchaseAdvanced, child: Text('Comprar Avanzada $199')),
+          SwitchListTile(title: Text('Europea/Americana'), value: isEuropeanRouletteSelected, onChanged: (newValue) => setState(() => isEuropeanRouletteSelected = newValue)),
+          ElevatedButton(onPressed: spinRoulette, child: Text('Girar')),
+          Text('Resultado: ${spinHistory.lastOrNull ?? ''}'),
+          Text('Proyección: $predictionText'),
+          Text('Martingale: Apuesta siguiente ${bettingAdvisor.calculateNextBet(false)}'), // General, no fijo
+          SizedBox(height: 200, child: buildFrequencyPieChart()),
+          if (!hasPremiumSubscription) ElevatedButton(onPressed: purchaseAdvancedSubscription, child: Text('Comprar Avanzada $199')),
           ElevatedButton(onPressed: () => launchUrl(Uri.parse('mailto:support@example.com?subject=Comentarios')), child: Text('Enviar Comentarios')),
         ],
       ),
@@ -1726,11 +1726,11 @@ import 'package:flutter/material.dart'; // Para Colors
 import 'package:pointycastle/pointycastle.dart';
 
 class RouletteRNG {
-  final List<int> europeanWheel = List.generate(37, (i) => i); // 0-36
-  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 00, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2];
+  final List<int> europeanWheelNumbers = List.generate(37, (i) => i); // 0-36
+  final List<int> americanWheelNumbers = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 00, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2];
 
   // Mapa de colores estándar (igual para ambas ruletas, 00 verde como 0)
-  final Map<int, Color> numberColors = {
+  final Map<int, Color> rouletteNumberColors = {
     0: Colors.green, 00: Colors.green,
     1: Colors.red, 2: Colors.black, 3: Colors.red, 4: Colors.black, 5: Colors.red, 6: Colors.black, 7: Colors.red, 8: Colors.black, 9: Colors.red, 10: Colors.black,
     11: Colors.black, 12: Colors.red, 13: Colors.black, 14: Colors.red, 15: Colors.black, 16: Colors.red, 17: Colors.black, 18: Colors.red, 19: Colors.red, 20: Colors.black,
@@ -1739,37 +1739,37 @@ class RouletteRNG {
   };
 
   // Sectores (adaptados; para americana, ignora 00 si no aplica)
-  final Map<String, List<int>> sectors = {
+  final Map<String, List<int>> rouletteSectors = {
     'Voisins du Zéro': [22, 18, 29, 7, 28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25],
     'Tiers du Cylindre': [27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33],
     'Orphelins': [17, 34, 6, 1, 20, 14, 31, 9],
     'Jeu Zéro': [12, 35, 3, 26, 0, 32, 15],
   };
 
-  int generateResult(bool isEuropean) {
-    var wheel = isEuropean ? europeanWheel : americanWheel;
-    var rng = FortunaRandom();
-    var seed = List<int>.generate(32, (_) => Random.secure().nextInt(256));
-    rng.seed(KeyParameter(Uint8List.fromList(seed)));
-    return wheel[rng.nextUint32() % wheel.length];
+  int generateSpinResult(bool isEuropeanWheel) {
+    var selectedWheel = isEuropeanWheel ? europeanWheelNumbers : americanWheelNumbers;
+    var randomNumberGenerator = FortunaRandom();
+    var randomSeed = List<int>.generate(32, (_) => Random.secure().nextInt(256));
+    randomNumberGenerator.seed(KeyParameter(Uint8List.fromList(randomSeed)));
+    return selectedWheel[randomNumberGenerator.nextUint32() % selectedWheel.length];
   }
 
-  List<int> getNeighbors(int number, bool isEuropean, int count = 4) {
-    var wheel = isEuropean ? europeanWheel : americanWheel;
-    int index = wheel.indexOf(number);
-    if (index == -1) return [];
-    List<int> neighbors = [];
-    for (int i = 1; i <= count; i++) {
-      neighbors.add(wheel[(index + i) % wheel.length]);
-      neighbors.add(wheel[(index - i + wheel.length) % wheel.length]);
+  List<int> getAdjacentNumbers(int targetNumber, bool isEuropeanWheel, int neighborCount = 4) {
+    var selectedWheel = isEuropeanWheel ? europeanWheelNumbers : americanWheelNumbers;
+    int numberIndex = selectedWheel.indexOf(targetNumber);
+    if (numberIndex == -1) return [];
+    List<int> adjacentNumbers = [];
+    for (int i = 1; i <= neighborCount; i++) {
+      adjacentNumbers.add(selectedWheel[(numberIndex + i) % selectedWheel.length]);
+      adjacentNumbers.add(selectedWheel[(numberIndex - i + selectedWheel.length) % selectedWheel.length]);
     }
-    return neighbors..sort();
+    return adjacentNumbers..sort();
   }
 
-  double getSectorFrequency(String sector, List<int> history) {
-    var nums = sectors[sector] ?? [];
-    int count = history.where((num) => nums.contains(num)).length;
-    return history.isEmpty ? 0 : count / history.length * 100;
+  double calculateSectorFrequencyPercentage(String sectorName, List<int> spinHistory) {
+    var sectorNumbers = rouletteSectors[sectorName] ?? [];
+    int occurrenceCount = spinHistory.where((number) => sectorNumbers.contains(number)).length;
+    return spinHistory.isEmpty ? 0 : occurrenceCount / spinHistory.length * 100;
   }import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -1855,94 +1855,94 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool isEuropean = true;
-  List<int> history = [];
-  RouletteRNG rng = RouletteRNG();
-  MartingaleAdvisor martingale = MartingaleAdvisor();
-  String prediction = '';
-  int subscriptionLevel = 0; // 0: free, 1: advanced, 2: premium (guarda en prefs/Firestore)
+  bool isEuropeanRouletteSelected = true;
+  List<int> spinHistory = [];
+  RouletteRNG rouletteRandomGenerator = RouletteRNG();
+  MartingaleAdvisor bettingAdvisor = MartingaleAdvisor();
+  String predictionText = '';
+  int userSubscriptionTier = 0; // 0: free, 1: advanced, 2: premium (guarda en prefs/Firestore)
 
   @override
   void initState() {
     super.initState();
-    _loadPreferences();
+    _loadUserPreferences();
   }
 
-  void _loadPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    subscriptionLevel = prefs.getInt('subscriptionLevel') ?? 0;
+  void _loadUserPreferences() async {
+    SharedPreferences userPreferences = await SharedPreferences.getInstance();
+    userSubscriptionTier = userPreferences.getInt('subscriptionLevel') ?? 0;
   }
 
-  void _spin() {
-    int result = rng.generateResult(isEuropean);
+  void spinRoulette() {
+    int spinResult = rouletteRandomGenerator.generateSpinResult(isEuropeanRouletteSelected);
     setState(() {
-      history.add(result);
-      prediction = _predictNext();
+      spinHistory.add(spinResult);
+      predictionText = _generatePrediction();
     });
-    if (subscriptionLevel > 0) FirebaseFirestore.instance.collection('spins').add({'result': result});
+    if (userSubscriptionTier > 0) FirebaseFirestore.instance.collection('spins').add({'result': spinResult});
   }
 
-  String _predictNext() {
-    if (history.isEmpty) return 'No hay historial para proyecciones.';
+  String _generatePrediction() {
+    if (spinHistory.isEmpty) return 'No hay historial para proyecciones.';
 
-    var wheel = isEuropean ? rng.europeanWheel : rng.americanWheel;
-    Map<int, int> freq = {for (var num in wheel) num: 0};
-    for (var num in history) {
-      if (freq.containsKey(num)) freq[num] = (freq[num] ?? 0) + 1;
+    var currentWheelNumbers = isEuropeanRouletteSelected ? rouletteRandomGenerator.europeanWheelNumbers : rouletteRandomGenerator.americanWheelNumbers;
+    Map<int, int> numberFrequencyMap = {for (var number in currentWheelNumbers) number: 0};
+    for (var number in spinHistory) {
+      if (numberFrequencyMap.containsKey(number)) numberFrequencyMap[number] = (numberFrequencyMap[number] ?? 0) + 1;
     }
-    var sortedFreq = freq.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
-    List<int> hot = sortedFreq.take(5).map((e) => e.key).toList();
-    List<int> cold = sortedFreq.reversed.take(5).map((e) => e.key).toList();
+    var sortedFrequencies = numberFrequencyMap.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    List<int> hotNumbers = sortedFrequencies.take(5).map((entry) => entry.key).toList();
+    List<int> coldNumbers = sortedFrequencies.reversed.take(5).map((entry) => entry.key).toList();
 
-    String proj = 'Proyección básica (calientes: ${hot.join(', ')} | fríos: ${cold.join(', ')})\n¡Upgrada a Avanzado ($199 en Play Store) para predicciones en áreas como Voisins du Zéro!';
+    String predictionMessage = 'Proyección básica (calientes: ${hotNumbers.join(', ')} | fríos: ${coldNumbers.join(', ')})\n¡Upgrada a Avanzado ($199 en Play Store) para predicciones en áreas como Voisins du Zéro!';
 
-    if (subscriptionLevel >= 1) { // Avanzado: Un sector + teaser premium
-      double freqVoisins = rng.getSectorFrequency('Voisins du Zéro', history);
-      proj += '\nÁrea Voisins du Zéro: Frecuencia ${freqVoisins.toStringAsFixed(1)}% (predicción: más probable si último cerca de 0)\n¡Upgrada a Premium ($299) para todos los campos/sectores!';
-      if (history.isNotEmpty) {
-        var neighbors = rng.getNeighbors(history.last, isEuropean);
-        proj += '\nVecinos: ${neighbors.join(', ')}';
+    if (userSubscriptionTier >= 1) { // Avanzado: Un sector + teaser premium
+      double voisinsSectorFrequency = rouletteRandomGenerator.calculateSectorFrequencyPercentage('Voisins du Zéro', spinHistory);
+      predictionMessage += '\nÁrea Voisins du Zéro: Frecuencia ${voisinsSectorFrequency.toStringAsFixed(1)}% (predicción: más probable si último cerca de 0)\n¡Upgrada a Premium ($299) para todos los campos/sectores!';
+      if (spinHistory.isNotEmpty) {
+        var adjacentNumbers = rouletteRandomGenerator.getAdjacentNumbers(spinHistory.last, isEuropeanRouletteSelected);
+        predictionMessage += '\nVecinos: ${adjacentNumbers.join(', ')}';
       }
     }
 
-    if (subscriptionLevel == 2) { // Premium: Todos los sectores
-      proj = 'Proyección completa:\nCalientes: ${hot.join(', ')} | Fríos: ${cold.join(', ')}\n';
-      rng.sectors.forEach((sector, nums) {
-        double freqSector = rng.getSectorFrequency(sector, history);
-        proj += '$sector: Frecuencia ${freqSector.toStringAsFixed(1)}% (números: ${nums.join(', ')})\n';
+    if (userSubscriptionTier == 2) { // Premium: Todos los sectores
+      predictionMessage = 'Proyección completa:\nCalientes: ${hotNumbers.join(', ')} | Fríos: ${coldNumbers.join(', ')}\n';
+      rouletteRandomGenerator.rouletteSectors.forEach((sectorName, sectorNumbers) {
+        double sectorFrequency = rouletteRandomGenerator.calculateSectorFrequencyPercentage(sectorName, spinHistory);
+        predictionMessage += '$sectorName: Frecuencia ${sectorFrequency.toStringAsFixed(1)}% (números: ${sectorNumbers.join(', ')})\n';
       });
     }
 
-    return proj;
+    return predictionMessage;
   }
 
-  Widget _buildPieChart() {
-    var wheel = isEuropean ? rng.europeanWheel : rng.americanWheel;
-    Map<int, int> freq = {for (var num in wheel) num: 0};
-    for (var num in history) freq[num] = (freq[num] ?? 0) + 1;
+  Widget buildFrequencyPieChart() {
+    var currentWheelNumbers = isEuropeanRouletteSelected ? rouletteRandomGenerator.europeanWheelNumbers : rouletteRandomGenerator.americanWheelNumbers;
+    Map<int, int> numberFrequencyMap = {for (var number in currentWheelNumbers) number: 0};
+    for (var number in spinHistory) numberFrequencyMap[number] = (numberFrequencyMap[number] ?? 0) + 1;
 
-    List<charts.Series<MapEntry<int, int>, int>> series = [
+    List<charts.Series<MapEntry<int, int>, int>> chartSeriesList = [
       charts.Series<MapEntry<int, int>, int>(
         id: 'Freq',
-        data: freq.entries.toList(),
-        domainFn: (entry, _) => entry.key,
-        measureFn: (entry, _) => entry.value,
-        colorFn: (entry, _) => charts.Color.fromOther(color: charts.Color(r: rng.numberColors[entry.key]!.red, g: rng.numberColors[entry.key]!.green, b: rng.numberColors[entry.key]!.blue)), // Colores de ruleta
+        data: numberFrequencyMap.entries.toList(),
+        domainFn: (frequencyEntry, _) => frequencyEntry.key,
+        measureFn: (frequencyEntry, _) => frequencyEntry.value,
+        colorFn: (frequencyEntry, _) => charts.Color.fromOther(color: charts.Color(r: rouletteRandomGenerator.rouletteNumberColors[frequencyEntry.key]!.red, g: rouletteRandomGenerator.rouletteNumberColors[frequencyEntry.key]!.green, b: rouletteRandomGenerator.rouletteNumberColors[frequencyEntry.key]!.blue)), // Colores de ruleta
       )
     ];
-    return charts.PieChart<int>(series);
+    return charts.PieChart<int>(chartSeriesList);
   }
 
-  Widget _buildColoredNumbers(List<int> numbers, String label) {
+  Widget buildColoredNumberDisplay(List<int> numbersList, String displayLabel) {
     return Column(
       children: [
-        Text(label),
+        Text(displayLabel),
         Wrap(
-          children: numbers.map((num) => Tooltip(
-            message: 'Número $num',
+          children: numbersList.map((number) => Tooltip(
+            message: 'Número $number',
             child: CircleAvatar(
-              backgroundColor: rng.numberColors[num],
-              child: Text('$num', style: TextStyle(color: Colors.white)),
+              backgroundColor: rouletteRandomGenerator.rouletteNumberColors[number],
+              child: Text('$number', style: TextStyle(color: Colors.white)),
             ),
           )).toList(),
         ),
@@ -1950,40 +1950,40 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  void _purchase(int level, int amount) async {
+  void purchaseSubscription(int subscriptionTier, int priceInCents) async {
     // Usa in_app_purchase para Play Store/App Store
-    final InAppPurchase iap = InAppPurchase.instance;
-    if (await iap.isAvailable()) {
+    final InAppPurchase inAppPurchaseService = InAppPurchase.instance;
+    if (await inAppPurchaseService.isAvailable()) {
       // Define productos: 'advanced_plan', 'premium_plan'
-      var product = level == 1 ? 'advanced_plan' : 'premium_plan';
-      var details = await iap.queryProductDetails({product});
-      if (details.productDetails.isNotEmpty) {
-        var purchaseParam = PurchaseParam(productDetails: details.productDetails.first);
-        await iap.buyNonConsumable(purchaseParam: purchaseParam);
-        // On success (escucha stream): set subscriptionLevel = level, save prefs
-        setState(() => subscriptionLevel = level);
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setInt('subscriptionLevel', level);
+      var productId = subscriptionTier == 1 ? 'advanced_plan' : 'premium_plan';
+      var productDetails = await inAppPurchaseService.queryProductDetails({productId});
+      if (productDetails.productDetails.isNotEmpty) {
+        var purchaseParameters = PurchaseParam(productDetails: productDetails.productDetails.first);
+        await inAppPurchaseService.buyNonConsumable(purchaseParam: purchaseParameters);
+        // On success (escucha stream): set userSubscriptionTier = subscriptionTier, save prefs
+        setState(() => userSubscriptionTier = subscriptionTier);
+        SharedPreferences userPreferences = await SharedPreferences.getInstance();
+        userPreferences.setInt('subscriptionLevel', subscriptionTier);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var hot = []; // Llena dinámicamente si necesitas en UI
+    var hotNumbersList = []; // Llena dinámicamente si necesitas en UI
     return Scaffold(
       appBar: AppBar(title: Text('Ruleta Simulador')),
       body: Column(
         children: [
-          SwitchListTile(title: Text('Europea/Americana'), value: isEuropean, onChanged: (val) => setState(() => isEuropean = val)),
-          ElevatedButton(onPressed: _spin, child: Text('Girar')),
-          Text('Resultado: ${history.lastOrNull ?? ''}'),
-          Text('Proyección: $prediction'),
-          _buildColoredNumbers(hot, 'Calientes'), // Ejemplo con formas/colores
-          Text('Martingale: Apuesta siguiente ${martingale.getNextBet(false)}'),
-          SizedBox(height: 200, child: _buildPieChart()),
-          if (subscriptionLevel == 0) ElevatedButton(onPressed: () => _purchase(1, 19900), child: Text('Avanzado $199')),
-          if (subscriptionLevel == 1) ElevatedButton(onPressed: () => _purchase(2, 29900), child: Text('Premium $299')),
+          SwitchListTile(title: Text('Europea/Americana'), value: isEuropeanRouletteSelected, onChanged: (newValue) => setState(() => isEuropeanRouletteSelected = newValue)),
+          ElevatedButton(onPressed: spinRoulette, child: Text('Girar')),
+          Text('Resultado: ${spinHistory.lastOrNull ?? ''}'),
+          Text('Proyección: $predictionText'),
+          buildColoredNumberDisplay(hotNumbersList, 'Calientes'), // Ejemplo con formas/colores
+          Text('Martingale: Apuesta siguiente ${bettingAdvisor.calculateNextBet(false)}'),
+          SizedBox(height: 200, child: buildFrequencyPieChart()),
+          if (userSubscriptionTier == 0) ElevatedButton(onPressed: () => purchaseSubscription(1, 19900), child: Text('Avanzado $199')),
+          if (userSubscriptionTier == 1) ElevatedButton(onPressed: () => purchaseSubscription(2, 29900), child: Text('Premium $299')),
           ElevatedButton(onPressed: () => launchUrl(Uri.parse('mailto:support@example.com?subject=Comentarios')), child: Text('Enviar Comentarios')),
         ],
       ),
@@ -1995,7 +1995,7 @@ Future<void> requestPermissions() async {
   await Permission.location.request();
 }
 
-Future<bool> isInMexico() async {
+Future<bool> checkIfUserInMexico() async {
   return true; // Placeholder
 }
 }
