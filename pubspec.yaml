@@ -1,0 +1,66 @@
+name: tokyo_roulette_app
+description: Advanced roulette prediction app with MVVM architecture
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Firebase
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.15.3
+  firebase_remote_config: ^4.3.12
+  firebase_storage: ^11.6.0
+  
+  # Stripe payments
+  flutter_stripe: ^10.1.1
+  
+  # ML Kit for OCR
+  google_mlkit_text_recognition: ^0.11.0
+  
+  # Camera
+  camera: ^0.10.5+9
+  image_picker: ^1.0.7
+  
+  # Permissions
+  permission_handler: ^11.2.0
+  
+  # State management (MVVM)
+  provider: ^6.1.1
+  
+  # Local storage
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.2
+  path_provider: ^2.1.2
+  
+  # UI/Charts
+  fl_chart: ^0.66.0
+  animations: ^2.0.11
+  
+  # Utilities
+  intl: ^0.18.1
+  uuid: ^4.3.3
+  vibration: ^1.8.4
+  
+  # Geolocation (for regional checks)
+  geolocator: ^11.0.0
+  
+  # HTTP
+  http: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
