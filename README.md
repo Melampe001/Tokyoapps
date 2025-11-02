@@ -1691,11 +1691,11 @@ class _MainScreenState extends State<MainScreen> {
         measureFn: (entry, _) => entry.value,
         colorFn: (entry, _) {
           final color = rng.numberColors[entry.key] ?? Colors.grey;
-          return charts.Color.fromOther(color: charts.Color(
+          return charts.Color(
             r: color.red,
             g: color.green,
             b: color.blue
-          ));
+          );
         },
       )
     ];
