@@ -1,0 +1,28 @@
+{
+  "name": "tokyo-roulette-predictor",
+  "version": "1.0.0",
+  "description": "Simulador y predictor de ruleta europea y americana",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -c-1",
+    "build": "echo 'Build complete - static files ready'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "roulette",
+    "predictor",
+    "casino",
+    "gambling",
+    "simulator"
+  ],
+  "author": "Melampe001",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Melampe001/Tokyoapps.git"
+  },
+  "homepage": "https://melampe001.github.io/Tokyoapps/",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
