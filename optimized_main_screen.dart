@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Optimized MainScreen with performance improvements
@@ -112,15 +113,18 @@ class _OptimizedMainScreenState extends State<OptimizedMainScreen> {
   void _removeOldestFromCache() {
     final removed = history.removeFirst();
     
-    // Decrement frequency
-    _frequencyCache[removed] = (_frequencyCache[removed] ?? 1) - 1;
-    if (_frequencyCache[removed]! <= 0) {
+    // Decrement frequency - key must exist since it's in history
+    final currentFreq = _frequencyCache[removed]!;
+    if (currentFreq <= 1) {
       _frequencyCache.remove(removed);
+    } else {
+      _frequencyCache[removed] = currentFreq - 1;
     }
     
-    // Update sector frequencies
+    // Update sector frequencies - key must exist if number is in sector
     for (var sector in rng.getSectorsForNumber(removed)) {
-      _sectorFrequencyCache[sector] = (_sectorFrequencyCache[sector] ?? 1) - 1;
+      final currentSectorFreq = _sectorFrequencyCache[sector]!;
+      _sectorFrequencyCache[sector] = currentSectorFreq - 1;
     }
   }
 
@@ -190,9 +194,10 @@ class _OptimizedMainScreenState extends State<OptimizedMainScreen> {
     
     try {
       final batch = FirebaseFirestore.instance.batch();
+      final userId = FirebaseAuth.instance.currentUser?.uid ?? 'anonymous';
       final collection = FirebaseFirestore.instance
           .collection('users')
-          .doc('current_user')  // Replace with actual user ID
+          .doc(userId)
           .collection('spins');
       
       for (var data in _pendingWrites) {
@@ -350,13 +355,40 @@ class _OptimizedMainScreenState extends State<OptimizedMainScreen> {
   }
 }
 
-// Stub for the optimized RNG (would be imported)
+// Note: In production, import the actual OptimizedRouletteRNG from optimized_roulette_rng.dart
+// This stub is provided for demonstration purposes only.
+// Use: import 'optimized_roulette_rng.dart';
+
 class OptimizedRouletteRNG {
+  // Simplified stub - see optimized_roulette_rng.dart for full implementation
   final List<int> europeanWheel = List.generate(37, (i) => i);
-  final List<int> americanWheel = List.generate(38, (i) => i);
-  final Map<String, List<int>> sectors = {};
+  final List<int> americanWheel = [
+    0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1,
+    37, // Represents 00 in American roulette
+    27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2
+  ];
+  final Map<String, List<int>> sectors = {
+    'Voisins du Zéro': [22, 18, 29, 7, 28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25],
+    'Tiers du Cylindre': [27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33],
+    'Orphelins': [17, 34, 6, 1, 20, 14, 31, 9],
+    'Jeu Zéro': [12, 35, 3, 26, 0, 32, 15],
+  };
   
-  int generateResult(bool isEuropean) => 0;
-  List<int> getNeighbors(int number, bool isEuropean) => [];
-  List<String> getSectorsForNumber(int number) => [];
+  int generateResult(bool isEuropean) {
+    // Stub implementation - see full version in optimized_roulette_rng.dart
+    return 0;
+  }
+  
+  List<int> getNeighbors(int number, bool isEuropean) {
+    // Stub implementation - see full version in optimized_roulette_rng.dart
+    return [];
+  }
+  
+  List<String> getSectorsForNumber(int number) {
+    // Stub implementation - see full version in optimized_roulette_rng.dart
+    return sectors.entries
+        .where((entry) => entry.value.contains(number))
+        .map((entry) => entry.key)
+        .toList();
+  }
 }
