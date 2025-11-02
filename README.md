@@ -71,10 +71,16 @@ flutterfire configure
 flutter run
 ```
 
-📖 For detailed installation instructions, see [INSTALL.md](INSTALL.md)
+📖 **Need help?** Check out these guides:
+- 🚀 [**QUICKSTART.md**](QUICKSTART.md) - 5-minute setup guide
+- 📖 [**INSTALL.md**](INSTALL.md) - Detailed installation instructions
+- 🐛 [**TROUBLESHOOTING.md**](TROUBLESHOOTING.md) - Common issues and solutions
 
 ## 📚 Documentation
 
+- **[QUICKSTART.md](QUICKSTART.md)** - Quick 5-minute setup guide
+- **[INSTALL.md](INSTALL.md)** - Comprehensive installation guide
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Troubleshooting common issues
 - **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Technical architecture and features
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive testing procedures
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Build and deployment guide
