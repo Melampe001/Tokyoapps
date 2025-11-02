@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../utils/constants.dart';
+import '../../utils/demo_mode.dart';
 import 'main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -114,6 +115,28 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(AppColors.neonRed),
               ),
+              if (DemoMode.isEnabled) ...[
+                const SizedBox(height: 30),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.neonGreen.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: AppColors.neonGreen,
+                      width: 2,
+                    ),
+                  ),
+                  child: const Text(
+                    '🎮 DEMO MODE',
+                    style: TextStyle(
+                      color: AppColors.neonGreen,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
         ),

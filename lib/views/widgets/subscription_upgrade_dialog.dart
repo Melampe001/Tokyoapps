@@ -4,6 +4,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import '../../viewmodels/roulette_viewmodel.dart';
 import '../../models/user_subscription.dart';
 import '../../utils/constants.dart';
+import '../../utils/demo_mode.dart';
 
 class SubscriptionUpgradeDialog extends StatelessWidget {
   const SubscriptionUpgradeDialog({super.key});
@@ -37,6 +38,40 @@ class SubscriptionUpgradeDialog extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 16),
+            
+            // Demo mode indicator
+            if (DemoMode.isEnabled)
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.neonGreen.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.neonGreen,
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: AppColors.neonGreen,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        DemoMode.paymentDemoMessage,
+                        style: TextStyle(
+                          color: AppColors.neonGreen,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             const SizedBox(height: 24),
             
             // Current tier

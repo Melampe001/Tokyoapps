@@ -7,19 +7,33 @@ import 'viewmodels/roulette_viewmodel.dart';
 import 'viewmodels/auth_viewmodel.dart';
 import 'views/screens/splash_screen.dart';
 import 'utils/constants.dart';
+import 'utils/demo_mode.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Initialize Firebase (with error handling for missing config)
-  try {
-    await Firebase.initializeApp();
-  } catch (e) {
-    print('Firebase initialization error: $e');
+  if (!DemoMode.isEnabled) {
+    try {
+      await Firebase.initializeApp();
+      print('Firebase initialized successfully');
+    } catch (e) {
+      print('Firebase initialization error: $e');
+      print('App will run in demo mode without Firebase');
+    }
+  } else {
+    print('Running in DEMO MODE - Firebase initialization skipped');
+    print(DemoMode.demoMessage);
   }
   
-  // Initialize Stripe
-  Stripe.publishableKey = AppConstants.stripePublishableKey;
+  // Initialize Stripe (only if not in demo mode)
+  if (!DemoMode.isEnabled) {
+    try {
+      Stripe.publishableKey = AppConstants.stripePublishableKey;
+    } catch (e) {
+      print('Stripe initialization error: $e');
+    }
+  }
   
   // Set preferred orientations (horizontal support)
   await SystemChrome.setPreferredOrientations([
