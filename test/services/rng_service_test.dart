@@ -19,7 +19,7 @@ void main() {
     test('Generate American roulette number in valid range', () {
       final number = rngService.generateNumber(isEuropean: false);
       expect(number, greaterThanOrEqualTo(0));
-      expect(number, lessThan(38)); // 0-36 + 00 (as 37)
+      expect(number, lessThanOrEqualTo(37)); // 0-36 + 00 (represented as 37)
     });
 
     test('Generate 500 numbers and verify all are valid', () {

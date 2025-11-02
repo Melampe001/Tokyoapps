@@ -254,13 +254,15 @@ class SubscriptionUpgradeDialog extends StatelessWidget {
         ),
       );
       
-      // In a real app, you would:
-      // 1. Create payment intent on your backend
-      // 2. Present Stripe payment sheet
-      // 3. Confirm payment
-      // 4. Update subscription in Firebase and local storage
+      // PRODUCTION TODO:
+      // 1. Create payment intent on your backend server
+      // 2. Present Stripe payment sheet with Flutter Stripe SDK
+      // 3. Confirm payment with Stripe
+      // 4. Verify payment on backend before updating subscription
+      // 5. Update subscription in Firebase and local storage
       
-      // For now, simulate purchase (DEMO ONLY)
+      // DEMO ONLY: Simulate purchase without real payment
+      // WARNING: Never update subscription without payment verification in production
       await Future.delayed(const Duration(seconds: 2));
       await viewModel.updateSubscription(tier);
       

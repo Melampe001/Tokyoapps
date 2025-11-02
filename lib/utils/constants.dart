@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  // Stripe keys (placeholder - should be loaded from env)
-  static const String stripePublishableKey = 'pk_test_YOUR_KEY_HERE';
-  static const String stripeSecretKey = 'sk_test_YOUR_KEY_HERE';
+  // Stripe keys - Load from environment or secure config in production
+  // TODO: Move to .env file and use flutter_dotenv package
+  static const String stripePublishableKey = String.fromEnvironment(
+    'STRIPE_PUBLISHABLE_KEY',
+    defaultValue: 'pk_test_YOUR_KEY_HERE',
+  );
+  // WARNING: Never hardcode or commit secret keys to version control
+  // Secret key should only be used on backend server
+  static const String stripeSecretKey = 'NEVER_USE_IN_CLIENT_APP';
   
   // Subscription prices
   static const int advancedPlanPrice = 19900; // $199.00 in cents

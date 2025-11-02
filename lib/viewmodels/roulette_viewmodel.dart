@@ -8,6 +8,7 @@ import '../services/rng_service.dart';
 import '../services/prediction_service.dart';
 import '../services/storage_service.dart';
 import '../services/camera_ocr_service.dart';
+import '../utils/logging.dart';
 
 class RouletteViewModel extends ChangeNotifier {
   final RNGService _rngService = RNGService();
@@ -105,8 +106,8 @@ class RouletteViewModel extends ChangeNotifier {
       try {
         await _firestore.collection('spins').add(spin.toJson());
       } catch (e) {
-        // Ignore Firebase errors in offline mode
-        print('Firebase save failed (offline?): $e');
+        // Ignore Firebase errors in offline mode - data is saved locally
+        AppLogger.warning('Firebase save failed (offline?): $e');
       }
       
       // Update history
@@ -184,7 +185,7 @@ class RouletteViewModel extends ChangeNotifier {
       try {
         await _firestore.collection('spins').add(spin.toJson());
       } catch (e) {
-        print('Firebase save failed (offline?): $e');
+        AppLogger.warning('Firebase save failed (offline?): $e');
       }
       
       // Update history

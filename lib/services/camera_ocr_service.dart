@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
+import '../utils/logging.dart';
 
 /// Service for camera capture and OCR number recognition
 class CameraOCRService {
@@ -28,7 +29,7 @@ class CameraOCRService {
       await cameraController!.initialize();
       return true;
     } catch (e) {
-      print('Error initializing camera: $e');
+      AppLogger.error('Error initializing camera', e);
       return false;
     }
   }
@@ -43,7 +44,7 @@ class CameraOCRService {
       final XFile image = await cameraController!.takePicture();
       return await recognizeNumberFromImage(image.path);
     } catch (e) {
-      print('Error capturing image: $e');
+      AppLogger.error('Error capturing image', e);
       return null;
     }
   }
@@ -59,7 +60,7 @@ class CameraOCRService {
       
       return await recognizeNumberFromImage(image.path);
     } catch (e) {
-      print('Error picking image: $e');
+      AppLogger.error('Error picking image', e);
       return null;
     }
   }
@@ -86,7 +87,7 @@ class CameraOCRService {
       
       return null;
     } catch (e) {
-      print('Error recognizing number: $e');
+      AppLogger.error('Error recognizing number', e);
       return null;
     }
   }
