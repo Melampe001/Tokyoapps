@@ -31,6 +31,31 @@ Tokyo Roulette Predictor is a sophisticated mobile application that provides int
 
 ### Installation
 
+#### Automatic Installation (Recommended)
+
+**Linux/Mac:**
+```bash
+# Clone repository
+git clone https://github.com/Melampe001/Tokyoapps.git
+cd Tokyoapps
+
+# Run install script
+chmod +x install.sh
+./install.sh
+```
+
+**Windows:**
+```batch
+REM Clone repository
+git clone https://github.com/Melampe001/Tokyoapps.git
+cd Tokyoapps
+
+REM Run install script
+install.bat
+```
+
+#### Manual Installation
+
 ```bash
 # Clone repository
 git clone https://github.com/Melampe001/Tokyoapps.git
@@ -45,6 +70,8 @@ flutterfire configure
 # Run the app
 flutter run
 ```
+
+📖 For detailed installation instructions, see [INSTALL.md](INSTALL.md)
 
 ## 📚 Documentation
 
