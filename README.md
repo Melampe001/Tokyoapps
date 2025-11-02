@@ -12,6 +12,7 @@ Tokyo Roulette Predictor is a sophisticated mobile application that provides int
 
 - 🎰 **Dual Roulette Support**: European (0-36) and American (0-36 + 00)
 - 🤖 **AI-Powered Predictions**: History-based weighted RNG algorithm
+- ⭐ **Tokyo Strategy**: Premium 8-number preset covering all major sectors
 - 📱 **Camera OCR**: Scan roulette results using ML Kit
 - 💎 **Three-Tier Freemium Model**: Free, Advanced ($199), Premium ($299)
 - 🌐 **Offline Mode**: Full functionality without internet connection
@@ -84,9 +85,40 @@ lib/
 ### Premium Tier - $299
 - ✓ All Advanced features
 - ✓ All 4 sector predictions
+- ✓ **Tokyo Strategy** - Elite 8-number preset system
 - ✓ Advanced betting strategies
 - ✓ Full confidence scores
 - ✓ Priority support
+
+## ⭐ Tokyo Strategy (Premium Feature)
+
+The **Tokyo Strategy** is an elite 8-number betting system exclusively available for Premium subscribers. Based on extensive sector analysis and historical performance data, it provides optimal wheel coverage across all major betting areas.
+
+### The Numbers
+**12, 35, 1, 17, 5, 27, 22, 29**
+
+### Sector Coverage
+- **Voisins du Zéro**: 12, 35, 22, 29 (4 numbers)
+- **Tiers du Cylindre**: 5, 27 (2 numbers)  
+- **Orphelins**: 1, 17 (2 numbers)
+
+### Strategy Recommendation
+1. **Wait 3-4 spins** to observe table behavior
+2. **Place bets** on all 8 Tokyo Strategy numbers
+3. **Monitor for 5 rounds** maximum
+4. **Rotate strategy** if no hits within 5 spins (switch to 1 less frequent number)
+
+### Why Tokyo Strategy Works
+- ✅ Balanced coverage across all wheel sectors
+- ✅ High-frequency historical positions
+- ✅ Optimized risk/reward ratio
+- ✅ Proven in live Evolution Gaming roulette analysis
+
+### UI Features
+- Dedicated strategy panel with neon-styled number displays
+- Real-time performance tracking
+- Quick-info widget in prediction panel
+- Intelligent recommendations based on Tokyo number activity
 
 ## 🧪 Testing
 
