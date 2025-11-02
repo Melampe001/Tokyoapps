@@ -1478,7 +1478,7 @@ import 'package:pointycastle/pointycastle.dart';
 
 class RouletteRNG {
   final List<int> europeanWheel = List.generate(37, (i) => i); // 0-36
-  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2]; // Orden real de rueda americana (37 representa 00)
+  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2]; // Orden físico de rueda americana (37 representa 00)
 
   // Mapa de colores estándar (igual para ambas ruletas, 37 representa 00 en ruleta americana)
   final Map<int, Color> numberColors = {
@@ -1689,11 +1689,14 @@ class _MainScreenState extends State<MainScreen> {
         data: freq.entries.toList(),
         domainFn: (entry, _) => entry.key,
         measureFn: (entry, _) => entry.value,
-        colorFn: (entry, _) => charts.Color.fromOther(color: charts.Color(
-          r: rng.numberColors[entry.key]!.red,
-          g: rng.numberColors[entry.key]!.green,
-          b: rng.numberColors[entry.key]!.blue
-        )),
+        colorFn: (entry, _) {
+          final color = rng.numberColors[entry.key] ?? Colors.grey;
+          return charts.Color.fromOther(color: charts.Color(
+            r: color.red,
+            g: color.green,
+            b: color.blue
+          ));
+        },
       )
     ];
     return charts.PieChart<int>(series);
@@ -1707,7 +1710,7 @@ class _MainScreenState extends State<MainScreen> {
           children: numbers.map((num) => Tooltip(
             message: 'Número $num',
             child: CircleAvatar(
-              backgroundColor: rng.numberColors[num],
+              backgroundColor: rng.numberColors[num] ?? Colors.grey,
               child: Text('$num', style: TextStyle(color: Colors.white)),
             ),
           )).toList(),
