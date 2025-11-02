@@ -33,7 +33,7 @@ lib/
 │   ├── rng_service.dart        # Weighted random number generation
 │   ├── prediction_service.dart # AI prediction algorithms
 │   ├── storage_service.dart    # SQLite + Firestore sync
-│   └── camera_service.dart     # ML Kit OCR integration
+│   └── camera_ocr_service.dart # ML Kit OCR integration
 └── utils/           # Constants, helpers, and utilities
     ├── constants.dart          # Colors, strings, config
     └── extensions.dart         # Dart extensions
