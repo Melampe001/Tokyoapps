@@ -328,8 +328,8 @@ flutter pub outdated
 # Update all packages to latest compatible versions
 flutter pub upgrade
 
-# Get specific package version
-flutter pub get package_name:version
+# Add specific package with version (edit pubspec.yaml then run)
+flutter pub get
 ```
 
 ### Verify Dependencies

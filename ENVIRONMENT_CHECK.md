@@ -347,7 +347,7 @@ Once all critical checkboxes (✅) are checked, your environment is ready!
 ### Next Steps
 1. If all checks pass: Start developing! See [QUICK_START.md](QUICK_START.md)
 2. If some checks fail: See [REQUIREMENTS.md](REQUIREMENTS.md) for detailed setup
-3. If issues persist: Check [TROUBLESHOOTING.md] or open an issue
+3. If issues persist: Check the troubleshooting sections in the documentation or open an issue
 
 ## Quick Reference
 

@@ -31,9 +31,17 @@ assets/icons/
 
 ## Icon Size Recommendations
 
-- **Navigation icons**: 24x24 dp (72x72 px @3x)
-- **Action icons**: 24x24 dp (72x72 px @3x)
-- **Feature icons**: 48x48 dp (144x144 px @3x)
+### Android Densities
+- **mdpi** (baseline): 24x24 px
+- **hdpi** (1.5x): 36x36 px
+- **xhdpi** (2x): 48x48 px
+- **xxhdpi** (3x): 72x72 px
+- **xxxhdpi** (4x): 96x96 px
+
+### Common Icon Sizes
+- **Navigation icons**: 24x24 dp
+- **Action icons**: 24x24 dp
+- **Feature icons**: 48x48 dp
 
 ## Usage in Code
 

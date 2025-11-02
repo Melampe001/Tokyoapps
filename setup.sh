@@ -45,8 +45,10 @@ echo ""
 echo "Step 2: Running Flutter doctor..."
 flutter doctor
 
-# Check if there are critical issues
-if flutter doctor | grep -q "✗"; then
+# Check Flutter doctor exit code for critical issues
+flutter doctor > /dev/null 2>&1
+DOCTOR_EXIT_CODE=$?
+if [ $DOCTOR_EXIT_CODE -ne 0 ]; then
     print_info "There are some issues reported by Flutter doctor"
     read -p "Do you want to continue anyway? (y/n) " -n 1 -r
     echo
