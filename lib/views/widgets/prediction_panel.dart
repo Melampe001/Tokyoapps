@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/roulette_viewmodel.dart';
 import '../../utils/constants.dart';
+import '../../models/user_subscription.dart';
+import 'tokyo_strategy_panel.dart';
 
 class PredictionPanel extends StatelessWidget {
   const PredictionPanel({super.key});
@@ -106,6 +108,12 @@ class PredictionPanel extends StatelessWidget {
                 height: 1.5,
               ),
             ),
+            
+            // Tokyo Strategy Quick Info (for premium users)
+            if (viewModel.subscription.tier == SubscriptionTier.premium) ...[
+              const SizedBox(height: 16),
+              const TokyoStrategyQuickInfo(isPremiumUser: true),
+            ],
             
             // Suggested bets
             if (viewModel.currentPrediction!.suggestedBets.isNotEmpty) ...[

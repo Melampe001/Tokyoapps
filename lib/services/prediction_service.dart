@@ -96,10 +96,18 @@ class PredictionService {
         return suggested;
         
       case SubscriptionTier.premium:
-        // Premium: Top sector numbers + hot numbers
-        final suggested = hotNumbers.take(5).toList();
+        // Premium: Include Tokyo Strategy numbers + sector analysis
+        final suggested = <int>[];
         
-        // Find best performing sector
+        // Add Tokyo Strategy numbers first (prioritized)
+        suggested.addAll(RouletteConstants.tokyoStrategyNumbers);
+        
+        // Add hot numbers that aren't already in Tokyo Strategy
+        suggested.addAll(
+          hotNumbers.where((n) => !suggested.contains(n)).take(3)
+        );
+        
+        // Find best performing sector and add additional numbers
         double maxFreq = 0.0;
         String bestSector = '';
         RouletteConstants.sectors.forEach((sectorName, _) {
@@ -112,7 +120,7 @@ class PredictionService {
         
         if (bestSector.isNotEmpty) {
           final sectorNumbers = RouletteConstants.sectors[bestSector] ?? [];
-          suggested.addAll(sectorNumbers.where((n) => !suggested.contains(n)).take(5));
+          suggested.addAll(sectorNumbers.where((n) => !suggested.contains(n)).take(2));
         }
         
         return suggested;
@@ -138,22 +146,31 @@ class PredictionService {
       return 'Basic: Follow hot numbers';
     }
     
-    // Analyze recent trend
+    // Check Tokyo Strategy coverage for premium users
+    if (tier == SubscriptionTier.premium) {
+      final tokyoNumbers = RouletteConstants.tokyoStrategyNumbers;
+      final recentHistory = history.take(20).toList();
+      final tokyoHits = recentHistory.where((s) => tokyoNumbers.contains(s.number)).length;
+      
+      if (tokyoHits >= 5) {
+        return 'Tokyo Strategy: Strong performance! Continue with Tokyo numbers (${tokyoNumbers.join(', ')})';
+      } else if (tokyoHits >= 3) {
+        return 'Tokyo Strategy: Moderate activity. Wait 3-4 spins, then bet Tokyo numbers';
+      } else {
+        return 'Tokyo Strategy: Low activity. Consider sector-based bets or wait for pattern';
+      }
+    }
+    
+    // Analyze recent trend for advanced tier
     final recentHistory = history.take(20).toList();
     final recentHotCount = recentHistory.where((s) => hotNumbers.contains(s.number)).length;
     
     if (recentHotCount > 12) {
-      return tier == SubscriptionTier.premium
-          ? 'Aggressive: Hot streak detected - increase bets on hot numbers and their neighbors'
-          : 'Follow the hot streak';
+      return 'Follow the hot streak';
     } else if (recentHotCount < 6) {
-      return tier == SubscriptionTier.premium
-          ? 'Contrarian: Consider cold numbers - they may be due'
-          : 'Hot numbers cooling off';
+      return 'Hot numbers cooling off';
     } else {
-      return tier == SubscriptionTier.premium
-          ? 'Balanced: Mix hot and sector-based bets'
-          : 'Balanced approach recommended';
+      return 'Balanced approach recommended';
     }
   }
 }
