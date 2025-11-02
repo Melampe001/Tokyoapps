@@ -50,9 +50,13 @@ flutter run
 
 ## 📚 Documentation
 
+**[📖 Complete Documentation Index](DOCUMENTATION_INDEX.md)** - Find all documentation organized by role and topic
+
 ### Getting Started
 - **[QUICK_START.md](QUICK_START.md)** - 5-minute setup guide for beginners
 - **[REQUIREMENTS.md](REQUIREMENTS.md)** - Complete list of dependencies and setup
+- **[ENVIRONMENT_CHECK.md](ENVIRONMENT_CHECK.md)** - Environment verification checklist
+- **[setup.sh](setup.sh)** - Automated setup script
 
 ### Development & Deployment
 - **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Technical architecture and features
