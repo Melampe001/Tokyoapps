@@ -22,14 +22,9 @@ Tokyo Roulette Predictor is a sophisticated mobile application that provides int
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 🎮 Demo Mode (Fastest Way to Test)
 
-- Flutter SDK 3.0.0+
-- Android Studio or VS Code
-- Java JDK 11+
-- Android SDK (API 24-35)
-
-### Installation
+Run the app immediately without Firebase or Stripe configuration:
 
 ```bash
 # Clone repository
@@ -39,8 +34,35 @@ cd Tokyoapps
 # Install dependencies
 flutter pub get
 
-# Configure Firebase (requires Firebase project)
+# Run in demo mode (default)
+flutter run
+```
+
+The app runs in **DEMO MODE** by default, with all features fully functional using local storage only. Perfect for testing and development!
+
+📖 **[See DEMO_MODE.md for complete guide](DEMO_MODE.md)**
+
+### 🔥 Production Setup (With Firebase & Stripe)
+
+For production deployment with cloud features:
+
+```bash
+# Prerequisites
+# - Flutter SDK 3.0.0+
+# - Android Studio or VS Code
+# - Java JDK 11+
+# - Android SDK (API 24-35)
+# - Firebase account
+# - Stripe account
+
+# Install dependencies
+flutter pub get
+
+# Configure Firebase
 flutterfire configure
+
+# Update Stripe keys in lib/utils/constants.dart
+# Disable demo mode in lib/utils/demo_mode.dart
 
 # Run the app
 flutter run
@@ -48,6 +70,7 @@ flutter run
 
 ## 📚 Documentation
 
+- **[DEMO_MODE.md](DEMO_MODE.md)** - ⭐ Start here! Run without Firebase/Stripe
 - **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Technical architecture and features
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive testing procedures
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Build and deployment guide
