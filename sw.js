@@ -15,7 +15,10 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Cache abierto');
-        return cache.addAll(urlsToCache.filter(url => url !== '/'));
+        // Cache solo los archivos específicos, el root se manejará con index.html
+        return cache.addAll(urlsToCache.filter(url => url !== '/')).catch(err => {
+          console.log('Error caching files:', err);
+        });
       })
   );
 });

@@ -9,7 +9,8 @@ let lastWin = true;
 
 // Configuración de ruletas
 const europeanWheel = Array.from({length: 37}, (_, i) => i); // 0-36
-const americanWheel = [0, ...Array.from({length: 36}, (_, i) => i + 1), '00']; // 0, 1-36, 00
+// Para ruleta americana, usamos 37 para representar '00' internamente
+const americanWheel = [...Array.from({length: 37}, (_, i) => i), 37]; // 0-36, 37 (00)
 
 // Colores en la ruleta (europea/americana estándar)
 const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
@@ -29,14 +30,16 @@ function init() {
 }
 
 // Cambiar tipo de ruleta
-function setRouletteType(type) {
+function setRouletteType(type, skipConfirm = false) {
     rouletteType = type;
     document.getElementById('btnEuropean').classList.toggle('active', type === 'european');
     document.getElementById('btnAmerican').classList.toggle('active', type === 'american');
     
-    // Reiniciar historial al cambiar tipo
-    if (confirm('¿Deseas limpiar el historial al cambiar de ruleta?')) {
-        clearHistory();
+    // Reiniciar historial al cambiar tipo (no preguntar durante inicialización)
+    if (!skipConfirm && history.length > 0) {
+        if (confirm('¿Deseas limpiar el historial al cambiar de ruleta?')) {
+            clearHistory();
+        }
     }
 }
 
@@ -51,7 +54,12 @@ function generateSecureRandom(max) {
 function spinRoulette() {
     const wheel = rouletteType === 'european' ? europeanWheel : americanWheel;
     const index = generateSecureRandom(wheel.length);
-    const result = wheel[index];
+    let result = wheel[index];
+    
+    // Convertir 37 a '00' para display en ruleta americana
+    if (rouletteType === 'american' && result === 37) {
+        result = '00';
+    }
     
     // Actualizar historial
     history.unshift(result);
@@ -80,8 +88,10 @@ function updateFrequency(number) {
 
 // Actualizar estrategia Martingale
 function updateMartingale(result) {
-    // Simplificado: considera victoria si sale rojo
-    const win = redNumbers.includes(Number(result));
+    // Estrategia Martingale para apuestas rojo/negro
+    // Considera victoria si sale rojo (esta es una estrategia ejemplo)
+    const numResult = result === '00' ? -1 : Number(result);
+    const win = redNumbers.includes(numResult);
     
     if (win) {
         currentMartingale = martingaleBase;
@@ -101,7 +111,10 @@ function animateResult(result) {
     let count = 0;
     const interval = setInterval(() => {
         const wheel = rouletteType === 'european' ? europeanWheel : americanWheel;
-        resultElement.textContent = wheel[count % wheel.length];
+        let displayNum = wheel[count % wheel.length];
+        // Mostrar '00' en lugar de 37 para americana
+        if (rouletteType === 'american' && displayNum === 37) displayNum = '00';
+        resultElement.textContent = displayNum;
         count++;
     }, 50);
     
@@ -176,7 +189,7 @@ function getHotNumbers(count) {
 // Obtener números fríos
 function getColdNumbers(count) {
     const wheel = rouletteType === 'european' ? europeanWheel : americanWheel;
-    const allNumbers = wheel.map(n => String(n));
+    const allNumbers = wheel.map(n => n === 37 ? '00' : String(n));
     
     // Números que no han salido o han salido poco
     const coldNums = allNumbers
@@ -279,7 +292,7 @@ function loadFromLocalStorage() {
         if (savedFrequency) numberFrequency = JSON.parse(savedFrequency);
         if (savedType) {
             rouletteType = savedType;
-            setRouletteType(savedType);
+            setRouletteType(savedType, true); // Skip confirm dialog during load
         }
         if (savedMartingale) currentMartingale = Number(savedMartingale);
     } catch (e) {
