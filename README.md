@@ -52,6 +52,7 @@ flutter run
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive testing procedures
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Build and deployment guide
 - **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Complete implementation status
+- **[PACKAGE_MANAGEMENT.md](PACKAGE_MANAGEMENT.md)** - Package dependency management (Gestión de paquetes)
 
 ## 🏗️ Architecture
 

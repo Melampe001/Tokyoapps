@@ -1,6 +1,6 @@
-# This is a basic workflow to help you get started with Actions
+# Flutter CI/CD Workflow for Tokyo Roulette App
 
-name: Tokyo
+name: CI
 
 # Controls when the workflow will run
 on:
@@ -15,7 +15,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # Build and test the Flutter app
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -23,14 +23,62 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      # Set up Flutter environment
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      # Verify Flutter installation
+      - name: Verify Flutter installation
+        run: flutter --version
+
+      # Get Flutter dependencies (this generates pubspec.lock)
+      - name: Get dependencies
+        run: flutter pub get
+
+      # Verify pubspec.lock was generated
+      - name: Verify pubspec.lock exists
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          if [ -f "pubspec.lock" ]; then
+            echo "✅ pubspec.lock generated successfully"
+            echo "Package dependencies are now locked (cerrado)"
+          else
+            echo "❌ pubspec.lock not found"
+            exit 1
+          fi
+
+      # Analyze code for issues
+      - name: Analyze code
+        run: flutter analyze
+
+      # Check code formatting
+      - name: Check formatting
+        run: dart format --set-exit-if-changed .
+
+      # Run tests
+      - name: Run tests
+        run: flutter test --coverage
+
+      # Upload coverage to artifacts
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/lcov.info
+
+      # Build Android APK
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      # Upload APK as artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
