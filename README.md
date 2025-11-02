@@ -1478,11 +1478,11 @@ import 'package:pointycastle/pointycastle.dart';
 
 class RouletteRNG {
   final List<int> europeanWheel = List.generate(37, (i) => i); // 0-36
-  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 00, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2]; // Orden real de rueda americana con 00
+  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2]; // Orden real de rueda americana (37 representa 00)
 
-  // Mapa de colores estándar (igual para ambas ruletas, 00 verde como 0)
+  // Mapa de colores estándar (igual para ambas ruletas, 37 representa 00 en ruleta americana)
   final Map<int, Color> numberColors = {
-    0: Colors.green, 00: Colors.green,
+    0: Colors.green, 37: Colors.green, // 37 = 00 en ruleta americana
     1: Colors.red, 2: Colors.black, 3: Colors.red, 4: Colors.black, 5: Colors.red, 6: Colors.black, 7: Colors.red, 8: Colors.black, 9: Colors.red, 10: Colors.black,
     11: Colors.black, 12: Colors.red, 13: Colors.black, 14: Colors.red, 15: Colors.black, 16: Colors.red, 17: Colors.black, 18: Colors.red, 19: Colors.red, 20: Colors.black,
     21: Colors.red, 22: Colors.black, 23: Colors.red, 24: Colors.black, 25: Colors.red, 26: Colors.black, 27: Colors.red, 28: Colors.black, 29: Colors.black, 30: Colors.red,
@@ -1652,7 +1652,7 @@ class _MainScreenState extends State<MainScreen> {
 
     String proj = 'Proyección básica (calientes: ${hot.join(', ')} | fríos: ${cold.join(', ')})';
     if (subscriptionLevel == 0) {
-      proj += '\n¡Upgrada a Avanzado ($199) para predicciones en sectores como Voisins du Zéro!';
+      proj += '\n¡Actualiza a Avanzado ($199) para predicciones en sectores como Voisins du Zéro!';
     }
 
     if (subscriptionLevel >= 1) { // Avanzado: Un sector + vecinos
@@ -1663,7 +1663,7 @@ class _MainScreenState extends State<MainScreen> {
         proj += '\nVecinos de ${history.last}: ${neighbors.join(', ')}';
       }
       if (subscriptionLevel == 1) {
-        proj += '\n¡Upgrada a Premium ($299) para todos los sectores!';
+        proj += '\n¡Actualiza a Premium ($299) para todos los sectores!';
       }
     }
 
