@@ -1,0 +1,9 @@
+version: '3.9'
+
+services:
+  go-server:
+    build: ./go-server
+    container_name: tokyo-go-server
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
