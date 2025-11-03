@@ -62,7 +62,7 @@ void main() {
       expect(spin00.getColorName(), equals('Green'));
     });
 
-    test('Serialize to JSON correctly', () {
+    test('Serialize to JSON correctly without id', () {
       final timestamp = DateTime.parse('2025-11-02T12:00:00Z');
       final spin = SpinResult(
         number: 17,
@@ -77,9 +77,29 @@ void main() {
       expect(json['timestamp'], equals('2025-11-02T12:00:00.000Z'));
       expect(json['method'], equals('camera'));
       expect(json['isEuropean'], isTrue);
+      expect(json.containsKey('id'), isFalse);
     });
 
-    test('Deserialize from JSON correctly', () {
+    test('Serialize to JSON correctly with id', () {
+      final timestamp = DateTime.parse('2025-11-02T12:00:00Z');
+      final spin = SpinResult(
+        id: 123,
+        number: 17,
+        timestamp: timestamp,
+        method: 'camera',
+        isEuropean: true,
+      );
+
+      final json = spin.toJson();
+
+      expect(json['id'], equals(123));
+      expect(json['number'], equals(17));
+      expect(json['timestamp'], equals('2025-11-02T12:00:00.000Z'));
+      expect(json['method'], equals('camera'));
+      expect(json['isEuropean'], isTrue);
+    });
+
+    test('Deserialize from JSON correctly without id', () {
       final json = {
         'number': 25,
         'timestamp': '2025-11-02T15:30:00.000Z',
@@ -89,6 +109,25 @@ void main() {
 
       final spin = SpinResult.fromJson(json);
 
+      expect(spin.id, isNull);
+      expect(spin.number, equals(25));
+      expect(spin.timestamp, equals(DateTime.parse('2025-11-02T15:30:00.000Z')));
+      expect(spin.method, equals('manual'));
+      expect(spin.isEuropean, isFalse);
+    });
+
+    test('Deserialize from JSON correctly with id', () {
+      final json = {
+        'id': 456,
+        'number': 25,
+        'timestamp': '2025-11-02T15:30:00.000Z',
+        'method': 'manual',
+        'isEuropean': false,
+      };
+
+      final spin = SpinResult.fromJson(json);
+
+      expect(spin.id, equals(456));
       expect(spin.number, equals(25));
       expect(spin.timestamp, equals(DateTime.parse('2025-11-02T15:30:00.000Z')));
       expect(spin.method, equals('manual'));

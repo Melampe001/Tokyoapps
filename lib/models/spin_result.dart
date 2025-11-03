@@ -1,10 +1,12 @@
 class SpinResult {
+  final int? id;
   final int number;
   final DateTime timestamp;
   final String method; // 'manual' or 'camera'
   final bool isEuropean;
   
   SpinResult({
+    this.id,
     required this.number,
     required this.timestamp,
     required this.method,
@@ -13,6 +15,7 @@ class SpinResult {
   
   Map<String, dynamic> toJson() {
     return {
+      if (id != null) 'id': id,
       'number': number,
       'timestamp': timestamp.toIso8601String(),
       'method': method,
@@ -22,6 +25,7 @@ class SpinResult {
   
   factory SpinResult.fromJson(Map<String, dynamic> json) {
     return SpinResult(
+      id: json['id'] as int?,
       number: json['number'] as int,
       timestamp: DateTime.parse(json['timestamp'] as String),
       method: json['method'] as String,

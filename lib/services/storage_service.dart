@@ -61,6 +61,7 @@ class StorageService {
     
     return List.generate(maps.length, (i) {
       return SpinResult(
+        id: maps[i]['id'] as int?,
         number: maps[i]['number'] as int,
         timestamp: DateTime.parse(maps[i]['timestamp'] as String),
         method: maps[i]['method'] as String,
@@ -80,6 +81,7 @@ class StorageService {
     
     return List.generate(maps.length, (i) {
       return SpinResult(
+        id: maps[i]['id'] as int?,
         number: maps[i]['number'] as int,
         timestamp: DateTime.parse(maps[i]['timestamp'] as String),
         method: maps[i]['method'] as String,
@@ -92,6 +94,35 @@ class StorageService {
   Future<void> clearSpinHistory() async {
     final db = await database;
     await db.delete('spins');
+  }
+  
+  /// Update a specific spin result
+  Future<void> updateSpinResult(SpinResult spin) async {
+    if (spin.id == null) {
+      throw ArgumentError('Cannot update spin result without an id');
+    }
+    final db = await database;
+    await db.update(
+      'spins',
+      {
+        'number': spin.number,
+        'timestamp': spin.timestamp.toIso8601String(),
+        'method': spin.method,
+        'isEuropean': spin.isEuropean ? 1 : 0,
+      },
+      where: 'id = ?',
+      whereArgs: [spin.id],
+    );
+  }
+  
+  /// Delete a specific spin result
+  Future<void> deleteSpinResult(int id) async {
+    final db = await database;
+    await db.delete(
+      'spins',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
   
   /// Get spin count by method
