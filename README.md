@@ -1,8 +1,12 @@
 # Tokyo Roulette Predictor
 
 [![CI](https://github.com/Melampe001/Tokyoapps/actions/workflows/blank.yml/badge.svg)](https://github.com/Melampe001/Tokyoapps/actions/workflows/blank.yml)
+[![Installation](https://img.shields.io/badge/Installation-Integrated-success)](INTEGRATION_STATUS.md)
+[![Docs](https://img.shields.io/badge/Docs-Bilingual-blue)](INSTALL.md)
 
 An advanced AI-powered roulette prediction application built with Flutter, featuring MVVM architecture, ML Kit OCR, and comprehensive analytics.
+
+> **✅ Installation Ready:** Complete installation infrastructure integrated. See [INTEGRATION_STATUS.md](INTEGRATION_STATUS.md) for details.
 
 ## 🎯 Overview
 
