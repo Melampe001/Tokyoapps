@@ -1,0 +1,11 @@
+app_name: Tokyoapps
+environment: development
+database:
+  host: localhost
+  port: 5432
+  user: tokyoapps
+  password: changeme
+features:
+  billing_enabled: true
+  admin_interface: true
+  testing_helpers: true
