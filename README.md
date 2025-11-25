@@ -52,6 +52,7 @@ flutter run
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive testing procedures
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Build and deployment guide
 - **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Complete implementation status
+- **[docs/CRAFT_PROMPT_GUIDE.md](docs/CRAFT_PROMPT_GUIDE.md)** - C.R.A.F.T. methodology for creating effective prompts
 
 ## 🏗️ Architecture
 
