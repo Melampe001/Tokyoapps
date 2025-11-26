@@ -7,6 +7,8 @@ import '../widgets/roulette_wheel_widget.dart';
 import '../widgets/prediction_panel.dart';
 import '../widgets/stats_chart.dart';
 import '../widgets/subscription_upgrade_dialog.dart';
+import '../widgets/tokyo_strategy_panel.dart';
+import '../../models/user_subscription.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -200,6 +202,21 @@ class _MainScreenState extends State<MainScreen> {
                 _buildSpinCounter('Camera', viewModel.cameraSpinCount, AppConstants.requiredCameraSpins),
               ],
             ),
+          ),
+          const SizedBox(height: 20),
+          
+          // Tokyo Strategy Panel
+          TokyoStrategyPanel(
+            isPremiumUser: viewModel.subscription.tier == SubscriptionTier.premium,
+            onNumberTap: () {
+              // Optional: Add haptic feedback or number highlight
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Tokyo Strategy number selected'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 20),
           

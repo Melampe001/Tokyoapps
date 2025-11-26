@@ -62,4 +62,17 @@ class RouletteConstants {
     'Orphelins': [17, 34, 6, 1, 20, 14, 31, 9],
     'Jeu Zéro': [12, 35, 3, 26, 0, 32, 15],
   };
+  
+  // Tokyo Strategy - Premium preset betting system
+  // Based on high-frequency numbers from sector analysis:
+  // - Voisins du Zéro: 12, 35
+  // - Orphelins: 1, 17  
+  // - Tiers du Cylindre: 5, 27
+  // - Range 22-29: 22, 29
+  static const List<int> tokyoStrategyNumbers = [12, 35, 1, 17, 5, 27, 22, 29];
+  
+  static const String tokyoStrategyDescription = 
+    'Tokyo Strategy: Elite 8-number system covering key positions from all major sectors. '
+    'Optimized for balanced wheel coverage with historical hot-spot analysis. '
+    'Recommended play: Bet after 3-4 spins, rotate if no hit within 5 rounds.';
 }

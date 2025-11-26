@@ -39,6 +39,7 @@ The app follows Model-View-ViewModel architecture:
 #### Weighted RNG
 - **History-based predictions**: Numbers weighted by recent history
 - **Sector analysis**: Voisins du Zéro, Tiers du Cylindre, Orphelins, Jeu Zéro
+- **Tokyo Strategy**: Premium 8-number preset system (12, 35, 1, 17, 5, 27, 22, 29)
 
 ### 3. UI Features ✓
 
@@ -143,7 +144,8 @@ lib/
         ├── prediction_panel.dart
         ├── roulette_wheel_widget.dart
         ├── stats_chart.dart
-        └── subscription_upgrade_dialog.dart
+        ├── subscription_upgrade_dialog.dart
+        └── tokyo_strategy_panel.dart    # Tokyo Strategy UI
 ```
 
 ## Setup Instructions
@@ -190,6 +192,44 @@ lib/
 - [ ] Subscription upgrades work
 - [ ] Stats chart animates smoothly
 - [ ] Tested on Android 15+ device
+
+## Tokyo Strategy Implementation
+
+The Tokyo Strategy is a premium feature that provides an elite 8-number betting system based on sector analysis.
+
+### Technical Implementation
+
+**Constants** (`lib/utils/constants.dart`):
+- `tokyoStrategyNumbers`: `[12, 35, 1, 17, 5, 27, 22, 29]`
+- `tokyoStrategyDescription`: Detailed strategy explanation
+
+**UI Components** (`lib/views/widgets/tokyo_strategy_panel.dart`):
+- `TokyoStrategyPanel`: Full strategy display with neon-styled numbers
+- `TokyoStrategyQuickInfo`: Compact widget for prediction panel
+- Locked overlay for non-premium users with upgrade prompt
+
+**Prediction Integration** (`lib/services/prediction_service.dart`):
+- Premium predictions prioritize Tokyo Strategy numbers
+- Strategy recommendations based on Tokyo number performance
+- Real-time activity tracking (strong/moderate/low)
+
+**Testing** (`test/tokyo_strategy_test.dart`):
+- Number validation and sector coverage
+- Premium prediction integration
+- Tier-specific feature access
+- Color mapping and validation
+
+### Usage
+
+Premium users see:
+1. Dedicated Tokyo Strategy panel on main screen
+2. Real-time performance indicator in predictions
+3. Intelligent strategy recommendations
+4. Quick-access number display with color coding
+
+Non-premium users see:
+- Locked overlay with upgrade prompt
+- Feature preview to encourage upgrade
 
 ## Known Limitations
 

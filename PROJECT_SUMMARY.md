@@ -117,6 +117,7 @@ This document provides a comprehensive overview of the Tokyo Roulette prediction
   
   **Premium Tier ($299)**:
   - All 4 sectors (Voisins, Tiers, Orphelins, Jeu Zéro)
+  - **Tokyo Strategy** - Elite 8-number system (12, 35, 1, 17, 5, 27, 22, 29)
   - Advanced betting strategies
   - Full prediction confidence scores
   - Priority features
@@ -216,6 +217,49 @@ This document provides a comprehensive overview of the Tokyo Roulette prediction
 - Firebase offline tolerance
 - Crash prevention
 
+## ⭐ Tokyo Strategy Feature
+
+### Overview
+The Tokyo Strategy is a premium-exclusive feature that provides an elite 8-number betting system based on comprehensive sector analysis. This was implemented as the core requirement from "realiza las que necesitamos para tokyo roulette".
+
+### The Strategy
+**Numbers**: 12, 35, 1, 17, 5, 27, 22, 29
+
+**Sector Coverage**:
+- Voisins du Zéro: 12, 35, 22, 29 (4 numbers)
+- Tiers du Cylindre: 5, 27 (2 numbers)
+- Orphelins: 1, 17 (2 numbers)
+
+### Implementation Details
+
+**Files Modified/Created**:
+1. `lib/utils/constants.dart` - Added Tokyo Strategy constants
+2. `lib/views/widgets/tokyo_strategy_panel.dart` - New dedicated UI component
+3. `lib/services/prediction_service.dart` - Integrated Tokyo numbers into premium predictions
+4. `lib/views/widgets/prediction_panel.dart` - Added Tokyo Strategy quick info
+5. `lib/views/screens/main_screen.dart` - Integrated Tokyo Strategy panel
+6. `test/tokyo_strategy_test.dart` - Comprehensive test suite
+
+**Features**:
+- ✅ Neon-styled number display with color coding (red/black/green)
+- ✅ Real-time performance tracking
+- ✅ Intelligent strategy recommendations based on Tokyo number activity
+- ✅ Locked overlay for non-premium users with upgrade prompt
+- ✅ Integration with AI prediction system
+- ✅ Quick-info widget in prediction panel
+- ✅ Comprehensive test coverage
+
+**Strategy Logic**:
+- Monitors Tokyo number hits in recent 20 spins
+- Strong performance (5+ hits): "Continue with Tokyo numbers"
+- Moderate performance (3-4 hits): "Wait 3-4 spins, then bet"
+- Low performance (<3 hits): "Consider sector-based bets or wait"
+
+**UI Components**:
+1. **TokyoStrategyPanel**: Full display with all 8 numbers, description, and strategy guide
+2. **TokyoStrategyQuickInfo**: Compact widget showing active Tokyo numbers in prediction panel
+3. Premium-only access with visual lock for free/advanced tiers
+
 ## Project Structure
 
 ```
@@ -256,16 +300,18 @@ Tokyoapps/
 │   │       ├── prediction_panel.dart        # AI predictions
 │   │       ├── roulette_wheel_widget.dart   # Wheel visualization
 │   │       ├── stats_chart.dart             # 3D bar chart
-│   │       └── subscription_upgrade_dialog.dart  # Purchase UI
+│   │       ├── subscription_upgrade_dialog.dart  # Purchase UI
+│   │       └── tokyo_strategy_panel.dart    # Tokyo Strategy UI
 │   │
 │   └── firebase_options.dart    # Firebase configuration
 │
 ├── test/                        # Automated tests
 │   ├── models/
 │   │   └── spin_result_test.dart
-│   └── services/
-│       ├── prediction_service_test.dart
-│       └── rng_service_test.dart
+│   ├── services/
+│   │   ├── prediction_service_test.dart
+│   │   └── rng_service_test.dart
+│   └── tokyo_strategy_test.dart
 │
 ├── assets/                      # Images and icons
 │   ├── images/
@@ -304,14 +350,15 @@ Tokyoapps/
 
 1. ✅ **Dual Roulette Support**: European (0-36) and American (0-36 + 00)
 2. ✅ **Smart Predictions**: AI-powered with history-based weighting
-3. ✅ **Three-Tier Freemium**: Free, Advanced ($199), Premium ($299)
-4. ✅ **Camera OCR**: Scan roulette numbers with ML Kit
-5. ✅ **Offline Mode**: Full functionality without internet
-6. ✅ **Neon UI**: Red/Black/Green theme with glow effects
-7. ✅ **3D Charts**: Animated statistics with smooth transitions
-8. ✅ **Horizontal Support**: Adaptive layouts for all orientations
-9. ✅ **Android 15+**: Optimized for latest Android versions
-10. ✅ **Comprehensive Testing**: Unit tests + manual testing guide
+3. ✅ **Tokyo Strategy**: Premium 8-number elite preset system
+4. ✅ **Three-Tier Freemium**: Free, Advanced ($199), Premium ($299)
+5. ✅ **Camera OCR**: Scan roulette numbers with ML Kit
+6. ✅ **Offline Mode**: Full functionality without internet
+7. ✅ **Neon UI**: Red/Black/Green theme with glow effects
+8. ✅ **3D Charts**: Animated statistics with smooth transitions
+9. ✅ **Horizontal Support**: Adaptive layouts for all orientations
+10. ✅ **Android 15+**: Optimized for latest Android versions
+11. ✅ **Comprehensive Testing**: Unit tests + manual testing guide
 
 ## Metrics & Tracking
 
