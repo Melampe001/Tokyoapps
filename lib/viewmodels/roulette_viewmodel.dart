@@ -9,13 +9,15 @@ import '../services/prediction_service.dart';
 import '../services/storage_service.dart';
 import '../services/camera_ocr_service.dart';
 import '../utils/logging.dart';
+import '../utils/demo_mode.dart';
 
 class RouletteViewModel extends ChangeNotifier {
   final RNGService _rngService = RNGService();
   final PredictionService _predictionService = PredictionService();
   final StorageService _storageService = StorageService();
   final CameraOCRService _cameraOCRService = CameraOCRService();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore? _firestore = DemoMode.isEnabled ? null : FirebaseFirestore.instance;
+  final bool _isDemoMode = DemoMode.isEnabled;
   
   // State
   bool _isEuropean = true;
@@ -102,12 +104,14 @@ class RouletteViewModel extends ChangeNotifier {
       // Save to storage
       await _storageService.saveSpinResult(spin);
       
-      // Save to Firebase if user is authenticated
-      try {
-        await _firestore.collection('spins').add(spin.toJson());
-      } catch (e) {
-        // Ignore Firebase errors in offline mode - data is saved locally
-        AppLogger.warning('Firebase save failed (offline?): $e');
+      // Save to Firebase if user is authenticated and not in demo mode
+      if (!_isDemoMode && _firestore != null) {
+        try {
+          await _firestore!.collection('spins').add(spin.toJson());
+        } catch (e) {
+          // Ignore Firebase errors in offline mode - data is saved locally
+          AppLogger.warning('Firebase save failed (offline?): $e');
+        }
       }
       
       // Update history
@@ -181,11 +185,13 @@ class RouletteViewModel extends ChangeNotifier {
       // Save to storage
       await _storageService.saveSpinResult(spin);
       
-      // Save to Firebase
-      try {
-        await _firestore.collection('spins').add(spin.toJson());
-      } catch (e) {
-        AppLogger.warning('Firebase save failed (offline?): $e');
+      // Save to Firebase (if not in demo mode)
+      if (!_isDemoMode && _firestore != null) {
+        try {
+          await _firestore!.collection('spins').add(spin.toJson());
+        } catch (e) {
+          AppLogger.warning('Firebase save failed (offline?): $e');
+        }
       }
       
       // Update history
