@@ -176,13 +176,6 @@ Ruleta Americana: 38 números (0 al 36 + 00), con doble cero, lo que aumenta la 
 Predictora de resultados: Las ruletas usan RNG (Random Number Generator) verdadero, que es impredecible por diseño (es aleatorio y justo). No se puede predecir con certeza, pero podemos crear un simulador que:
 Genera spins aleatorios usando RNG en código.
 Analiza historia de spins para sugerir "predicciones" basadas en patrones estadísticos (como números calientes/fríos), aunque esto es solo para simulación y no …
-[3:59 a.m., 25/10/2025] Tokyo: Introducción
-¡Hola! Entiendo que quieres una aplicación para Android que simule y "prediga" resultados en ruletas europea y americana. Vamos a aclarar algunos puntos clave basados en tu solicitud:
-Ruleta Europea: 37 números (0 al 36), con un solo cero.
-Ruleta Americana: 38 números (0 al 36 + 00), con doble cero, lo que aumenta la ventaja de la casa.
-Predictora de resultados: Las ruletas usan RNG (Random Number Generator) verdadero, que es impredecible por diseño (es aleatorio y justo). No se puede predecir con certeza, pero podemos crear un simulador que:
-Genera spins aleatorios usando RNG en código.
-Analiza historia de spins para sugerir "predicciones" basadas en patrones estadísticos (como números calientes/fríos), aunque esto es solo para simulación y no …
 [5:37 a.m., 25/10/2025] Tokyo: # pubspec.yaml - Copia y pega este contenido completo en el archivo pubspec.yaml de tu proyecto Flutter
 
 name: tokyo_roulette_predicciones
@@ -265,19 +258,6 @@ class MartingaleAdvisor {
   }
 }
 github.com/tuusuario/roulette-app
-import 'dart:math';
-import 'package:pointycastle/pointycastle.dart'; // Para RNG seguro
-
-class RouletteRNG {
-  final List<int> europeanWheel = List.generate(37, (i) => i); // 0-36
-  final List<int> americanWheel = [0, ...List.generate(36, (i) => i+1), 00]; // Custom para 00
-
-  int generateResult(bool isEuropean) {
-    var wheel = isEuropean ? europeanWheel : americanWheel;
-    var rng = Random.secure(); // Crypto-secure RNG
-    return wheel[rng.nextInt(wheel.length)];
-  }
-}
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -1635,12 +1615,32 @@ if exist CMakeLists.txt (
     make
     cd ..
 )
+
+// RouletteRNG class - Complete implementation with colors and sectors
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:pointycastle/pointycastle.dart';
 
 class RouletteRNG {
   final List<int> europeanWheel = List.generate(37, (i) => i); // 0-36
-  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 00, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2]; // Orden real de rueda americana con 00
+  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2]; // Orden físico de rueda americana (37 representa 00)
+
+  // Mapa de colores estándar (igual para ambas ruletas, 37 representa 00 en ruleta americana)
+  final Map<int, Color> numberColors = {
+    0: Colors.green, 37: Colors.green, // 37 = 00 en ruleta americana
+    1: Colors.red, 2: Colors.black, 3: Colors.red, 4: Colors.black, 5: Colors.red, 6: Colors.black, 7: Colors.red, 8: Colors.black, 9: Colors.red, 10: Colors.black,
+    11: Colors.black, 12: Colors.red, 13: Colors.black, 14: Colors.red, 15: Colors.black, 16: Colors.red, 17: Colors.black, 18: Colors.red, 19: Colors.red, 20: Colors.black,
+    21: Colors.red, 22: Colors.black, 23: Colors.red, 24: Colors.black, 25: Colors.red, 26: Colors.black, 27: Colors.red, 28: Colors.black, 29: Colors.black, 30: Colors.red,
+    31: Colors.black, 32: Colors.red, 33: Colors.black, 34: Colors.red, 35: Colors.black, 36: Colors.red,
+  };
+
+  // Sectores (adaptados; para americana, ignora 00 si no aplica)
+  final Map<String, List<int>> sectors = {
+    'Voisins du Zéro': [22, 18, 29, 7, 28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25],
+    'Tiers du Cylindre': [27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33],
+    'Orphelins': [17, 34, 6, 1, 20, 14, 31, 9],
+    'Jeu Zéro': [12, 35, 3, 26, 0, 32, 15],
+  };
 
   int generateResult(bool isEuropean) {
     var wheel = isEuropean ? europeanWheel : americanWheel;
@@ -1662,7 +1662,16 @@ class RouletteRNG {
     }
     return neighbors..sort();
   }
-}import 'package:flutter/material.dart';
+
+  double getSectorFrequency(String sector, List<int> history) {
+    var nums = sectors[sector] ?? [];
+    int count = history.where((num) => nums.contains(num)).length;
+    return history.isEmpty ? 0 : count / history.length * 100;
+  }
+}
+
+// Flutter App - Main implementation
+import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -1752,260 +1761,7 @@ class _MainScreenState extends State<MainScreen> {
   RouletteRNG rng = RouletteRNG();
   MartingaleAdvisor martingale = MartingaleAdvisor();
   String prediction = '';
-  bool isPremium = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPreferences();
-  }
-
-  void _loadPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isPremium = prefs.getBool('isPremium') ?? false;
-  }
-
-  void _spin() {
-    int result = rng.generateResult(isEuropean);
-    setState(() {
-      history.add(result);
-      prediction = _predictNext();
-    });
-    if (isPremium) FirebaseFirestore.instance.collection('spins').add({'result': result});
-  }
-
-  String _predictNext() {
-    if (history.isEmpty) return 'No hay historial para proyecciones.';
-    
-    // Calcula frecuencias para TODOS los números posibles (proyección general)
-    var wheel = isEuropean ? rng.europeanWheel : rng.americanWheel;
-    Map<int, int> freq = {for (var num in wheel) num: 0};
-    for (var num in history) {
-      if (freq.containsKey(num)) freq[num] = (freq[num] ?? 0) + 1;
-    }
-    
-    // Ordena por frecuencia
-    var sortedFreq = freq.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
-    
-    // Proyecciones básicas (gratuitas): Top 5 calientes y fríos
-    List<int> hot = sortedFreq.take(5).map((e) => e.key).toList();
-    List<int> cold = sortedFreq.reversed.take(5).map((e) => e.key).toList();
-    
-    String proj = 'Proyección (calientes: ${hot.join(', ')} | fríos: ${cold.join(', ')})';
-    
-    // Proyecciones avanzadas (pagadas): Vecinos del último número
-    if (isPremium && history.isNotEmpty) {
-      var last = history.last;
-      var neighbors = rng.getNeighbors(last, isEuropean);
-      proj += '\nVecinos de $last: ${neighbors.join(', ')} (proyección para próximos giros)';
-    }
-    
-    return proj;
-  }
-
-  Widget _buildPieChart() {
-    // Gráfico de frecuencias (para todos los números)
-    var wheel = isEuropean ? rng.europeanWheel : rng.americanWheel;
-    Map<int, int> freq = {for (var num in wheel) num: 0};
-    for (var num in history) freq[num] = (freq[num] ?? 0) + 1;
-    
-    List<charts.Series<MapEntry<int, int>, int>> series = [
-      charts.Series<MapEntry<int, int>, int>(
-        id: 'Freq',
-        data: freq.entries.toList(),
-        domainFn: (entry, _) => entry.key,
-        measureFn: (entry, _) => entry.value,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-      )
-    ];
-    return charts.PieChart<int>(series);
-  }
-
-  void _purchaseAdvanced() async {
-    // Implementa Stripe o in_app_purchase (ejemplo con Stripe)
-    var paymentIntent = await _createPaymentIntent(19900); // $199
-    await Stripe.instance.initPaymentSheet(paymentSheetParameters: SetupPaymentSheetParameters(paymentIntentClientSecret: paymentIntent['client_secret']));
-    await Stripe.instance.presentPaymentSheet();
-    // On success:
-    setState(() => isPremium = true);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isPremium', true);
-  }
-
-  Future<Map<String, dynamic>> _createPaymentIntent(int amount) async {
-    // Llama a backend para crear intent (placeholder)
-    return {}; 
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Ruleta Simulador')),
-      body: Column(
-        children: [
-          SwitchListTile(title: Text('Europea/Americana'), value: isEuropean, onChanged: (val) => setState(() => isEuropean = val)),
-          ElevatedButton(onPressed: _spin, child: Text('Girar')),
-          Text('Resultado: ${history.lastOrNull ?? ''}'),
-          Text('Proyección: $prediction'),
-          Text('Martingale: Apuesta siguiente ${martingale.getNextBet(false)}'), // General, no fijo
-          SizedBox(height: 200, child: _buildPieChart()),
-          if (!isPremium) ElevatedButton(onPressed: _purchaseAdvanced, child: Text('Comprar Avanzada $199')),
-          ElevatedButton(onPressed: () => launchUrl(Uri.parse('mailto:support@example.com?subject=Comentarios')), child: Text('Enviar Comentarios')),
-        ],
-      ),
-    );
-  }
-}
-
-Future<void> requestPermissions() async {
-  await Permission.location.request();
-}
-
-Future<bool> isInMexico() async {
-  Position position = await Geolocator.getCurrentPosition();
-  // Placeholder: return true; (implementa API real para país)
-  return true;
-}
-import 'dart:math';
-import 'package:flutter/material.dart'; // Para Colors
-import 'package:pointycastle/pointycastle.dart';
-
-class RouletteRNG {
-  final List<int> europeanWheel = List.generate(37, (i) => i); // 0-36
-  final List<int> americanWheel = [0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 00, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2];
-
-  // Mapa de colores estándar (igual para ambas ruletas, 00 verde como 0)
-  final Map<int, Color> numberColors = {
-    0: Colors.green, 00: Colors.green,
-    1: Colors.red, 2: Colors.black, 3: Colors.red, 4: Colors.black, 5: Colors.red, 6: Colors.black, 7: Colors.red, 8: Colors.black, 9: Colors.red, 10: Colors.black,
-    11: Colors.black, 12: Colors.red, 13: Colors.black, 14: Colors.red, 15: Colors.black, 16: Colors.red, 17: Colors.black, 18: Colors.red, 19: Colors.red, 20: Colors.black,
-    21: Colors.red, 22: Colors.black, 23: Colors.red, 24: Colors.black, 25: Colors.red, 26: Colors.black, 27: Colors.red, 28: Colors.black, 29: Colors.black, 30: Colors.red,
-    31: Colors.black, 32: Colors.red, 33: Colors.black, 34: Colors.red, 35: Colors.black, 36: Colors.red,
-  };
-
-  // Sectores (adaptados; para americana, ignora 00 si no aplica)
-  final Map<String, List<int>> sectors = {
-    'Voisins du Zéro': [22, 18, 29, 7, 28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25],
-    'Tiers du Cylindre': [27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33],
-    'Orphelins': [17, 34, 6, 1, 20, 14, 31, 9],
-    'Jeu Zéro': [12, 35, 3, 26, 0, 32, 15],
-  };
-
-  int generateResult(bool isEuropean) {
-    var wheel = isEuropean ? europeanWheel : americanWheel;
-    var rng = FortunaRandom();
-    var seed = List<int>.generate(32, (_) => Random.secure().nextInt(256));
-    rng.seed(KeyParameter(Uint8List.fromList(seed)));
-    return wheel[rng.nextUint32() % wheel.length];
-  }
-
-  List<int> getNeighbors(int number, bool isEuropean, int count = 4) {
-    var wheel = isEuropean ? europeanWheel : americanWheel;
-    int index = wheel.indexOf(number);
-    if (index == -1) return [];
-    List<int> neighbors = [];
-    for (int i = 1; i <= count; i++) {
-      neighbors.add(wheel[(index + i) % wheel.length]);
-      neighbors.add(wheel[(index - i + wheel.length) % wheel.length]);
-    }
-    return neighbors..sort();
-  }
-
-  double getSectorFrequency(String sector, List<int> history) {
-    var nums = sectors[sector] ?? [];
-    int count = history.where((num) => nums.contains(num)).length;
-    return history.isEmpty ? 0 : count / history.length * 100;
-  }import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:url_launcher/url_launcher.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'firebase_options.dart';
-import 'roulette_rng.dart';
-import 'martingale_advisor.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Stripe.publishableKey = 'pk_test_tu_clave_stripe';
-  await Stripe.instance.applySettings();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Tokyo Roulette Predicciones',
-      theme: ThemeData(primarySwatch: Colors.red),
-      home: LoginScreen(),
-    );
-  }
-}
-
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _checkLocationAndPermissions();
-    _setupRemoteConfig();
-  }
-
-  Future<void> _checkLocationAndPermissions() async {
-    await requestPermissions();
-    if (!await isInMexico()) {
-      showDialog(context: context, builder: (_) => AlertDialog(title: Text('No disponible en tu región')));
-      return;
-    }
-  }
-
-  Future<void> _setupRemoteConfig() async {
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.setConfigSettings(RemoteConfigSettings(fetchTimeout: Duration(minutes: 1), minimumFetchInterval: Duration(hours: 96)));
-    await remoteConfig.fetchAndActivate();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body: Center(child: ElevatedButton(onPressed: () => _login(), child: Text('Iniciar Sesión con Email'))),
-    );
-  }
-
-  void _login() async {
-    try {
-      await FirebaseAuth.instance.signInAnonymously();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MainScreen()));
-    } catch (e) {}
-  }
-}
-
-class MainScreen extends StatefulWidget {
-  @override
-  _MainScreenState createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  bool isEuropean = true;
-  List<int> history = [];
-  RouletteRNG rng = RouletteRNG();
-  MartingaleAdvisor martingale = MartingaleAdvisor();
-  String prediction = '';
-  int subscriptionLevel = 0; // 0: free, 1: advanced, 2: premium (guarda en prefs/Firestore)
+  int subscriptionLevel = 0; // 0: free, 1: advanced, 2: premium
 
   @override
   void initState() {
@@ -2029,7 +1785,7 @@ class _MainScreenState extends State<MainScreen> {
 
   String _predictNext() {
     if (history.isEmpty) return 'No hay historial para proyecciones.';
-
+    
     var wheel = isEuropean ? rng.europeanWheel : rng.americanWheel;
     Map<int, int> freq = {for (var num in wheel) num: 0};
     for (var num in history) {
@@ -2039,14 +1795,20 @@ class _MainScreenState extends State<MainScreen> {
     List<int> hot = sortedFreq.take(5).map((e) => e.key).toList();
     List<int> cold = sortedFreq.reversed.take(5).map((e) => e.key).toList();
 
-    String proj = 'Proyección básica (calientes: ${hot.join(', ')} | fríos: ${cold.join(', ')})\n¡Upgrada a Avanzado ($199 en Play Store) para predicciones en áreas como Voisins du Zéro!';
+    String proj = 'Proyección básica (calientes: ${hot.join(', ')} | fríos: ${cold.join(', ')})';
+    if (subscriptionLevel == 0) {
+      proj += '\n¡Actualiza a Avanzado ($199) para predicciones en sectores como Voisins du Zéro!';
+    }
 
-    if (subscriptionLevel >= 1) { // Avanzado: Un sector + teaser premium
+    if (subscriptionLevel >= 1) { // Avanzado: Un sector + vecinos
       double freqVoisins = rng.getSectorFrequency('Voisins du Zéro', history);
-      proj += '\nÁrea Voisins du Zéro: Frecuencia ${freqVoisins.toStringAsFixed(1)}% (predicción: más probable si último cerca de 0)\n¡Upgrada a Premium ($299) para todos los campos/sectores!';
+      proj += '\nÁrea Voisins du Zéro: ${freqVoisins.toStringAsFixed(1)}%';
       if (history.isNotEmpty) {
         var neighbors = rng.getNeighbors(history.last, isEuropean);
-        proj += '\nVecinos: ${neighbors.join(', ')}';
+        proj += '\nVecinos de ${history.last}: ${neighbors.join(', ')}';
+      }
+      if (subscriptionLevel == 1) {
+        proj += '\n¡Actualiza a Premium ($299) para todos los sectores!';
       }
     }
 
@@ -2054,10 +1816,10 @@ class _MainScreenState extends State<MainScreen> {
       proj = 'Proyección completa:\nCalientes: ${hot.join(', ')} | Fríos: ${cold.join(', ')}\n';
       rng.sectors.forEach((sector, nums) {
         double freqSector = rng.getSectorFrequency(sector, history);
-        proj += '$sector: Frecuencia ${freqSector.toStringAsFixed(1)}% (números: ${nums.join(', ')})\n';
+        proj += '$sector: ${freqSector.toStringAsFixed(1)}% (números: ${nums.join(', ')})\n';
       });
     }
-
+    
     return proj;
   }
 
@@ -2065,14 +1827,21 @@ class _MainScreenState extends State<MainScreen> {
     var wheel = isEuropean ? rng.europeanWheel : rng.americanWheel;
     Map<int, int> freq = {for (var num in wheel) num: 0};
     for (var num in history) freq[num] = (freq[num] ?? 0) + 1;
-
+    
     List<charts.Series<MapEntry<int, int>, int>> series = [
       charts.Series<MapEntry<int, int>, int>(
         id: 'Freq',
         data: freq.entries.toList(),
         domainFn: (entry, _) => entry.key,
         measureFn: (entry, _) => entry.value,
-        colorFn: (entry, _) => charts.Color.fromOther(color: charts.Color(r: rng.numberColors[entry.key]!.red, g: rng.numberColors[entry.key]!.green, b: rng.numberColors[entry.key]!.blue)), // Colores de ruleta
+        colorFn: (entry, _) {
+          final color = rng.numberColors[entry.key] ?? Colors.grey;
+          return charts.Color(
+            r: color.red,
+            g: color.green,
+            b: color.blue
+          );
+        },
       )
     ];
     return charts.PieChart<int>(series);
@@ -2086,7 +1855,7 @@ class _MainScreenState extends State<MainScreen> {
           children: numbers.map((num) => Tooltip(
             message: 'Número $num',
             child: CircleAvatar(
-              backgroundColor: rng.numberColors[num],
+              backgroundColor: rng.numberColors[num] ?? Colors.grey,
               child: Text('$num', style: TextStyle(color: Colors.white)),
             ),
           )).toList(),
@@ -2099,13 +1868,11 @@ class _MainScreenState extends State<MainScreen> {
     // Usa in_app_purchase para Play Store/App Store
     final InAppPurchase iap = InAppPurchase.instance;
     if (await iap.isAvailable()) {
-      // Define productos: 'advanced_plan', 'premium_plan'
       var product = level == 1 ? 'advanced_plan' : 'premium_plan';
       var details = await iap.queryProductDetails({product});
       if (details.productDetails.isNotEmpty) {
         var purchaseParam = PurchaseParam(productDetails: details.productDetails.first);
         await iap.buyNonConsumable(purchaseParam: purchaseParam);
-        // On success (escucha stream): set subscriptionLevel = level, save prefs
         setState(() => subscriptionLevel = level);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setInt('subscriptionLevel', level);
@@ -2115,7 +1882,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var hot = []; // Llena dinámicamente si necesitas en UI
     return Scaffold(
       appBar: AppBar(title: Text('Ruleta Simulador')),
       body: Column(
@@ -2124,7 +1890,6 @@ class _MainScreenState extends State<MainScreen> {
           ElevatedButton(onPressed: _spin, child: Text('Girar')),
           Text('Resultado: ${history.lastOrNull ?? ''}'),
           Text('Proyección: $prediction'),
-          _buildColoredNumbers(hot, 'Calientes'), // Ejemplo con formas/colores
           Text('Martingale: Apuesta siguiente ${martingale.getNextBet(false)}'),
           SizedBox(height: 200, child: _buildPieChart()),
           if (subscriptionLevel == 0) ElevatedButton(onPressed: () => _purchase(1, 19900), child: Text('Avanzado $199')),
@@ -2141,6 +1906,7 @@ Future<void> requestPermissions() async {
 }
 
 Future<bool> isInMexico() async {
-  return true; // Placeholder
-}
+  Position position = await Geolocator.getCurrentPosition();
+  // Placeholder: return true; (implementa API real para país)
+  return true;
 }
