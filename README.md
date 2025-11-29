@@ -1,6 +1,6 @@
 # Tokyo Roulette Predictor
 
-[![CI](https://github.com/Melampe001/Tokyoapps/actions/workflows/blank.yml/badge.svg)](https://github.com/Melampe001/Tokyoapps/actions/workflows/blank.yml)
+[![CI](https://github.com/Melampe001/Tokyoapps/actions/workflows/ci.yml/badge.svg)](https://github.com/Melampe001/Tokyoapps/actions/workflows/ci.yml)
 
 An advanced AI-powered roulette prediction application built with Flutter, featuring MVVM architecture, ML Kit OCR, and comprehensive analytics.
 
@@ -66,6 +66,83 @@ lib/
 ├── services/        # Core services
 └── utils/           # Constants & utilities
 ```
+
+## 📁 Repository Structure
+
+```
+Tokyoapps/
+├── .github/
+│   └── workflows/       # CI/CD workflow definitions
+│       └── ci.yml       # Main CI pipeline
+├── android/             # Android platform-specific code
+├── assets/              # Images and static resources
+├── config/              # Configuration files
+├── docs/                # Additional documentation
+├── lib/                 # Main Flutter/Dart source code
+│   ├── models/          # Data models
+│   ├── services/        # Business logic services
+│   ├── utils/           # Utility functions and constants
+│   ├── viewmodels/      # State management (MVVM)
+│   └── views/           # UI widgets and screens
+├── test/                # Unit and widget tests
+│   ├── models/          # Model tests
+│   └── services/        # Service tests
+├── Makefile             # Build automation commands
+├── pubspec.yaml         # Flutter dependencies
+└── README.md            # This file
+```
+
+## 🔄 Development Flow
+
+### Recommended Workflow
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Melampe001/Tokyoapps.git
+   cd Tokyoapps
+   ```
+
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+4. **Make your changes** following the MVVM architecture
+
+5. **Run formatting, build, and tests locally**
+   ```bash
+   make fmt      # Format the code
+   make build    # Build the application
+   make test     # Run tests
+   make ci       # Run full CI pipeline
+   ```
+
+6. **Commit and push your changes**
+   ```bash
+   git add .
+   git commit -m "feat: description of your changes"
+   git push origin feature/your-feature-name
+   ```
+
+7. **Create a Pull Request** targeting the `main` branch
+
+### CI Pipeline
+
+The CI workflow (`.github/workflows/ci.yml`) automatically runs on:
+- Push to `main` or `master` branches
+- Pull requests targeting `main` or `master` branches
+
+The pipeline executes:
+- `make fmt` - Code formatting
+- `make build` - Build verification
+- `make test` - Test execution
+- `make ci` - Full CI checks
+- Coverage report generation and artifact upload
 
 ## 🎮 Features by Tier
 

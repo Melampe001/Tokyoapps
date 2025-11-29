@@ -2,6 +2,14 @@
 
 # Targets for AI Logic
 
+.PHONY: fmt build test lint ci train deploy
+
+fmt:
+	@echo "Formatting the code..."
+
+build:
+	@echo "Building the application..."
+
 train:
 	@echo "Training the model..."
 
@@ -14,5 +22,5 @@ lint:
 ci:
 	@echo "Running Continuous Integration..."
 
-deply:
+deploy:
 	@echo "Deploying the application..."
