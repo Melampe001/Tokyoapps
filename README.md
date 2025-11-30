@@ -1,8 +1,12 @@
 # Tokyo Roulette Predictor
 
 [![CI](https://github.com/Melampe001/Tokyoapps/actions/workflows/blank.yml/badge.svg)](https://github.com/Melampe001/Tokyoapps/actions/workflows/blank.yml)
+[![Installation](https://img.shields.io/badge/Installation-Integrated-success)](INTEGRATION_STATUS.md)
+[![Docs](https://img.shields.io/badge/Docs-Bilingual-blue)](INSTALL.md)
 
 An advanced AI-powered roulette prediction application built with Flutter, featuring MVVM architecture, ML Kit OCR, and comprehensive analytics.
+
+> **✅ Installation Ready:** Complete installation infrastructure integrated. See [INTEGRATION_STATUS.md](INTEGRATION_STATUS.md) for details.
 
 ## 🎯 Overview
 
@@ -31,6 +35,31 @@ Tokyo Roulette Predictor is a sophisticated mobile application that provides int
 
 ### Installation
 
+#### Automatic Installation (Recommended)
+
+**Linux/Mac:**
+```bash
+# Clone repository
+git clone https://github.com/Melampe001/Tokyoapps.git
+cd Tokyoapps
+
+# Run install script
+chmod +x install.sh
+./install.sh
+```
+
+**Windows:**
+```batch
+REM Clone repository
+git clone https://github.com/Melampe001/Tokyoapps.git
+cd Tokyoapps
+
+REM Run install script
+install.bat
+```
+
+#### Manual Installation
+
 ```bash
 # Clone repository
 git clone https://github.com/Melampe001/Tokyoapps.git
@@ -46,8 +75,16 @@ flutterfire configure
 flutter run
 ```
 
+📖 **Need help?** Check out these guides:
+- 🚀 [**QUICKSTART.md**](QUICKSTART.md) - 5-minute setup guide
+- 📖 [**INSTALL.md**](INSTALL.md) - Detailed installation instructions
+- 🐛 [**TROUBLESHOOTING.md**](TROUBLESHOOTING.md) - Common issues and solutions
+
 ## 📚 Documentation
 
+- **[QUICKSTART.md](QUICKSTART.md)** - Quick 5-minute setup guide
+- **[INSTALL.md](INSTALL.md)** - Comprehensive installation guide
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Troubleshooting common issues
 - **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Technical architecture and features
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive testing procedures
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Build and deployment guide
